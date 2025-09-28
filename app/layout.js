@@ -1,5 +1,14 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import { Geist, Geist_Mono } from "next/font/google";
+import { Readex_Pro } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
+
+const readexPro = Readex_Pro({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700"],
+  variable: "--font-readex-pro",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,10 +28,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <head>
+        {/* Optional: Keep Google Fonts import if needed */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="antialiased">
+        {/* Wrap client-side dynamic font variables in a div */}
+        <div className={`${geistSans.variable} ${geistMono.variable} ${readexPro.variable}`}>
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );
