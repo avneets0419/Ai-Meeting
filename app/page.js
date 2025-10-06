@@ -1,4 +1,5 @@
 'use client'  
+import { CompareAi } from '@/components/CompareAi';
 import FAQ from '@/components/FAQ';
 import Features from '@/components/Features';
 import Glass from '@/components/Glass';
@@ -14,6 +15,7 @@ export default function Home() {
       <HeroSection/>
       <Features/>
       <AnimatedTestimonialsDemo/>
+      <CompareAi/>
 
     </div>
   )
