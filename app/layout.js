@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Readex_Pro } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { HeroUIProvider } from "@heroui/system";
 
 
 const readexPro = Readex_Pro({
@@ -28,7 +29,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* If using Google Fonts import for ReadexPro, keep this */}
         <link
@@ -39,7 +40,8 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${readexPro.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <HeroUIProvider>{children}</HeroUIProvider></Providers>
       </body>
     </html>
   );

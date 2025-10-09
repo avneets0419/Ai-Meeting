@@ -36,6 +36,8 @@ import {
   ChevronsUpDown,
   Brain,
   Calendar1,
+  Sun,
+  Moon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -69,10 +71,15 @@ import {
   CommandShortcut,
 } from "@/components/ui/command"
 import { IconCirclePlusFilled } from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Button } from "@heroui/react";
+import MeetingUploadModal from "./meetingUploadModal";
 
 export function AppSidebar() {
-
+  const pathname = usePathname()
   const { open } = useSidebar();
+  const { theme, setTheme } = useTheme(); // Get theme and setTheme
 
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -87,6 +94,8 @@ export function AppSidebar() {
     document.addEventListener("keydown", down)
     return () => document.removeEventListener("keydown", down)
   }, [])
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   return (
     
@@ -103,15 +112,20 @@ export function AppSidebar() {
 
         <SidebarMenu className="mt-3 w-full">
           <SidebarMenuItem>
+          <MeetingUploadModal>
             <SidebarMenuButton asChild>
+
               <button className="flex items-center gap-2 cursor-pointer bg-primary text-white px-3 py-2 rounded-md hover:bg-purple-300 transition w-full ">
                 <IconCirclePlusFilled className="w-4 h-4" />
                 <span>New Meeting</span>
               </button>
+
             </SidebarMenuButton>
+            </MeetingUploadModal>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      
 
       <SidebarContent className="overflow-y-auto overflow-x-hidden">
         {/* Core Navigation */}
@@ -120,7 +134,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive>
+                <SidebarMenuButton asChild isActive={pathname === "/dashboard"}>
                   <a href="/dashboard">
                     <Home />
                     <span>Dashboard</span>
@@ -128,7 +142,7 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild isActive={pathname === "/dashboard/calendar"}>
                   <a href="/dashboard/calendar">
                   <Calendar1/>
                     <span>Calendar</span>
@@ -142,7 +156,9 @@ export function AppSidebar() {
                     <ListTodo />
 
                     <span>My Meetings</span>
+                    <Button color="danger">Help</Button>
                   </a>
+
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -157,7 +173,7 @@ export function AppSidebar() {
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/action-items">
+                  <a href="/dashboard/tasks">
                     <ClipboardCheck />
                     <span>Action Items</span>
                   </a>
@@ -243,21 +259,16 @@ export function AppSidebar() {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/reports">
-                    <BarChart2 />
-                    <span>Reports</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/integrations">
-                    <Puzzle />
-                    <span>Integrations</span>
-                  </a>
+                  <button 
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    className="flex items-center gap-2 cursor-pointer w-full"
+                  >
+                    {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                    <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+                  </button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

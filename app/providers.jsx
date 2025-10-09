@@ -8,7 +8,10 @@ export function Providers({ children }) {
     <HeroUIProvider>
       <NextThemesProvider
         attribute="class"
-        
+        defaultTheme="dark"
+        enableSystem={false}
+        storageKey="theme"
+        disableTransitionOnChange
       >
         {children}
       </NextThemesProvider>

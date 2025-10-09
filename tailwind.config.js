@@ -5,7 +5,7 @@ module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@heroui/theme/dist/components/(accordion|kbd|navbar|divider).js"
+    "./node_modules/@heroui/theme/dist/components/(accordion|button|kbd|modal|navbar|divider|ripple|spinner).js"
   ],
   theme: {
     extend: {},

@@ -22,14 +22,14 @@ export function SectionCards() {
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
+              <IconTrendingUp className="h-4 w-4"/>
               +2.5%
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="size-4" />
+            Trending up this month <IconTrendingUp className="h-4 w-4" />
           </div>
         </CardFooter>
       </Card>
@@ -37,11 +37,11 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Active Tasks</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            1,234
+            9
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingDown />
+              <IconTrendingDown className="h-4 w-4"/>
               -20%
             </Badge>
           </CardAction>
@@ -57,18 +57,18 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>In Progress Task</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            45,678
+            4
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
+              <IconTrendingUp className="h-4 w-4"/>
               +12.5%
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention <IconTrendingUp className="size-4" />
+            Strong user retention <IconTrendingUp className="h-4 w-4" />
           </div>
           {/* <div className="text-muted-foreground">Engagement exceed targets</div> */}
         </CardFooter>
@@ -77,11 +77,11 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Completed Tasks</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4.5%
+            200
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              <IconTrendingUp />
+              <IconTrendingUp className="h-4 w-4"/>
               +4.5%
             </Badge>
           </CardAction>
