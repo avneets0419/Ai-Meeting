@@ -59,11 +59,11 @@ export function Features({
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className={`text-purple-500 font-semibold text-sm uppercase tracking-wider`}>
+          <span className={`text-purple-500 font-semibold text-sm uppercase tracking-wider font-readex`}>
             AI Mentors. Real Results.
           </span>
           <h2
-            className="text-4xl md:text-5xl font-bold text-white dark:text-white mt-4 mb-6">
+            className="text-4xl md:text-5xl font-bold text-white dark:text-white mt-4 mb-6 font-readex">
             AI That Actually Teaches
           </h2>
         </div>

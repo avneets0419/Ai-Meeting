@@ -1,34 +1,35 @@
 
 
-import { Brain, BrainCog } from "lucide-react";
+import { BarChart3Icon, Brain, BrainCog, BrainCogIcon, ClipboardCheckIcon } from "lucide-react";
 import { Features } from "./ui/features";
 
 const features= [
   {
     id: 1,
-    icon: BrainCog,
-    title: "Who Are AI Experts?",
+    icon: BrainCogIcon,
+    title: "AI-Powered Summaries",
     description:
-      "AI Experts at BCA Labs are domain-specific mentors trained to guide you in tech, coding, and academics.",
+      "Transform long, complex meetings into concise, actionable summaries in seconds with advanced AI.",
     image: "https://bcalabs.org/companions.jpg",
   },
   {
     id: 2,
-    icon: BrainCog,
-    title: "Why AI Experts?",
+    icon: ClipboardCheckIcon,
+    title: "Smart Action Tracking",
     description:
-      "Get instant, accurate help from experts—whether it's for coding or understanding tough concepts. They are trained on their expertise.",
+      "Automatically extract key decisions, assign tasks, and track responsibilities effortlessly.",
     image: "https://bcalabs.org/companions.jpg",
   },
   {
     id: 3,
-    icon: Brain,
-    title: "AI-Powered Learning",
+    icon: BarChart3Icon,
+    title: "Insightful Dashboard",
     description:
-      "Experience personalized, AI-driven learning tailored for BCA, BBA, and other students.",
+      "Visualize meeting insights, task progress, and team productivity — all in one clean dashboard.",
     image: "https://bcalabs.org/companions_group_2.jpg",
   },
 ];
+  
 
 const FeaturesTab = () => {
   return (

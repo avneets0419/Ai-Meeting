@@ -142,7 +142,7 @@ export const Compare = ({
             zIndex: 40,
           }}
           transition={{ duration: 0 }}>
-          <div
+          {/* <div
             className="w-36 h-full [mask-image:radial-gradient(100px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-indigo-400 via-transparent to-transparent z-20 opacity-50" />
           <div
             className="w-10 h-1/2 [mask-image:radial-gradient(50px_at_left,white,transparent)] absolute top-1/2 -translate-y-1/2 left-0 bg-gradient-to-r from-cyan-400 via-transparent to-transparent z-10 opacity-100" />
@@ -155,7 +155,7 @@ export const Compare = ({
               particleDensity={1200}
               className="w-full h-full"
               particleColor="#FFFFFF" />
-          </div>
+          </div> */}
           {showHandlebar && (
             <div
               className="h-5 w-5 rounded-md top-1/2 -translate-y-1/2 bg-white z-30 -right-2.5 absolute   flex items-center justify-center shadow-[0px_-1px_0px_0px_#FFFFFF40]">
