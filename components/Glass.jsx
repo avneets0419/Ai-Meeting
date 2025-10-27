@@ -89,8 +89,8 @@ const AnimatedNavLink = ({
                        pointer-events-none z-0
 "></div>
        <button onClick={()=>console.log("Clicked")}
-         className=" hover:cursor-pointer relative z-10 px-4 py-2 sm:px-3 text-xs sm:text-sm font-semibold text-black bg-gradient-to-br from-gray-100 to-gray-300 rounded-full hover:from-gray-200 hover:to-gray-400 transition-all duration-200 w-full sm:w-auto ">
-         Signup
+         className=" hover:cursor-pointer relative z-10 px-4 py-2 sm:px-3 text-xs sm:text-sm font-semibold text-black bg-gradient-to-br from-gray-100 to-gray-300 rounded-full hover:from-gray-200 hover:to-purple-600 transition-all duration-200 w-full sm:w-auto ">
+         SignUp
        </button>
     </div>)
   return (

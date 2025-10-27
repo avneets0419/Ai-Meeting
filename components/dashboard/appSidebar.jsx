@@ -115,7 +115,7 @@ export function AppSidebar() {
           <MeetingUploadModal>
             <SidebarMenuButton asChild>
 
-              <button className="flex items-center gap-2 cursor-pointer bg-primary text-white px-3 py-2 rounded-md hover:bg-purple-300 transition w-full ">
+              <button className="flex items-center gap-2 cursor-pointer bg-primary font-semibold text-white px-3 py-2 rounded-md hover:bg-purple-300 transition w-full ">
                 <IconCirclePlusFilled className="w-4 h-4" />
                 <span>New Meeting</span>
               </button>
@@ -150,21 +150,20 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <a href="/dashboard/meetings">
                     <ListTodo />
 
                     <span>My Meetings</span>
-                    <Button color="danger">Help</Button>
                   </a>
 
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/summaries">
+                <SidebarMenuButton asChild isActive={pathname === "/dashboard/summaries"}>
+                  <a href="/dashboard/summaries">
                     <FileText />
                     <span>Summaries</span>
                   </a>
@@ -172,7 +171,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild isActive={pathname === "/dashboard/tasks"}>
                   <a href="/dashboard/tasks">
                     <ClipboardCheck />
                     <span>Action Items</span>

@@ -23,7 +23,7 @@ const GlassSurface = ({
   children,
   width = 200,
   height = 80,
-  borderRadius = 20,
+  borderRadius = 60,
   borderWidth = 0.07,
   brightness = 50,
   opacity = 0.93,

@@ -1,12 +1,14 @@
-"use client";;
+"use client";
 import React, { useState,useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 
+
 import * as THREE from "three";
 import Glass from "../Glass";
+import { useRouter } from "next/navigation";
 
 export const CanvasRevealEffect = ({
   animationSpeed = 10,
@@ -419,6 +421,7 @@ export const SignInPage = ({
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [initialCanvasVisible, setInitialCanvasVisible] = useState(true);
   const [reverseCanvasVisible, setReverseCanvasVisible] = useState(false);
+  const router =useRouter()
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
@@ -462,7 +465,8 @@ export const SignInPage = ({
           // Transition to success screen after animation
           setTimeout(() => {
             setStep("success");
-          }, 2000);
+            router.push("/dashboard");
+          }, 2750);
         }
       }
     }
@@ -493,8 +497,10 @@ export const SignInPage = ({
               animationSpeed={3}
               containerClassName="bg-black"
               colors={[
-                [255, 255, 255],
-                [255, 255, 255],
+                [160, 90, 255],  // vibrant lavender-purple
+    [190, 120, 255], // soft violet
+    [220, 180, 255]
+                
               ]}
               dotSize={6}
               reverse={false} />
@@ -508,8 +514,9 @@ export const SignInPage = ({
               animationSpeed={4}
               containerClassName="bg-black"
               colors={[
-                [255, 255, 255],
-                [255, 255, 255],
+                [160, 90, 255],  // vibrant lavender-purple
+    [190, 120, 255], // soft violet
+    [220, 180, 255]
               ]}
               dotSize={6}
               reverse={true} />
