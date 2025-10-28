@@ -4,6 +4,7 @@ import { Readex_Pro } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { HeroUIProvider } from "@heroui/system";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 
 const readexPro = Readex_Pro({
@@ -41,7 +42,8 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} ${readexPro.variable} antialiased`}
       >
         <Providers>
-          <HeroUIProvider>{children}</HeroUIProvider></Providers>
+          <HeroUIProvider>{children}
+            <SpeedInsights/></HeroUIProvider></Providers>
       </body>
     </html>
   );

@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
               {/* Main content */}
               <main className="flex-1 overflow-y-auto overflow-x-hidden">
                 <SidebarTrigger />
-                <div className="p-6">{children}</div>
+                <div className="">{children}</div>
               </main>
             </div>
           </SidebarProvider>

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 
 // Create some dummy initial files
 
-export default function UploadFile() {
+export default function UploadFile({ onFileChange }) {
   const maxSize = 10 * 1024 * 1024; // 10MB default
 
   const [
@@ -31,6 +31,9 @@ export default function UploadFile() {
   });
 
   const file = files[0];
+  React.useEffect(() => {
+    onFileChange?.(file);
+  }, [file, onFileChange]);
 
   return (
     <div className="flex flex-col gap-2">

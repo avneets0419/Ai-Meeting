@@ -3,7 +3,7 @@ import React from 'react'
 
 function page() {
   return (
-    <div className="px-4 lg:px-6">
+    <div className="p-4 lg:p-6">
       <Calender/>
     </div>
   )
