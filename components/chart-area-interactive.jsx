@@ -26,6 +26,8 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import UploadFile from "./dashboard/Upload";
 import { Button } from "./ui/button";
+import { MultiStepLoader } from "./ui/multi-step-loader";
+import { useState } from "react";
 
 export const description = "An interactive area chart";
 
@@ -122,6 +124,12 @@ const chartData = [
   { date: "2024-06-29", desktop: 103, mobile: 160 },
   { date: "2024-06-30", desktop: 446, mobile: 400 },
 ];
+const loadingStates = [
+  { text: "Transcribing Meeting" },
+  { text: "Analyzing Tone" },
+  { text: "Generating Summary" },
+  { text: "Generating Tasks based on meeting" },
+];
 
 const chartConfig = {
   visitors: {
@@ -143,6 +151,7 @@ export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState("90d");
   const [uploadedFile, setUploadedFile] = React.useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (file) => {
     setUploadedFile(file);
@@ -151,6 +160,13 @@ export function ChartAreaInteractive() {
   const handleSubmit = () => {
     console.log("Submitting file:", uploadedFile);
     // your submit logic (API, Firestore, etc.)
+    setLoading(true);
+
+    // Fake process time
+    setTimeout(() => {
+      setLoading(false);
+      alert("Upload complete!");
+    }, 8000);
   };
 
   React.useEffect(() => {
@@ -174,6 +190,7 @@ export function ChartAreaInteractive() {
   });
 
   return (
+    <div>
     <Card className="@container/card">
       <CardHeader>
         <CardTitle>Upload Meeting</CardTitle>
@@ -188,13 +205,21 @@ export function ChartAreaInteractive() {
         <UploadFile onFileChange={handleFileChange} />
 
         {uploadedFile && (
-  <div className="flex justify-end mt-2">
-    <Button onClick={handleSubmit} className="w-auto px-4 py-2 text-sm">
-      Summarize Now
-    </Button>
-  </div>
-)}
+          <div className="flex justify-end mt-2">
+            <Button onClick={handleSubmit} className="w-auto px-4 py-2 text-sm">
+              Summarize Now
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
+    {/* Loader */}
+    <MultiStepLoader
+        loadingStates={loadingStates}
+        loading={loading}
+        duration={2000}
+      />
+
+    </div>
   );
 }
