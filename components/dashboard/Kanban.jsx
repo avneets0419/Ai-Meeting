@@ -10,13 +10,15 @@ import {
 } from "@/components/kibo-ui/kanban";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "../ui/button";
+import { PlusIcon } from "lucide-react";
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 const columns = [
-  { id: faker.string.uuid(), name: "Planned", color: "#6B7280" },
-  { id: faker.string.uuid(), name: "In Progress", color: "#F59E0B" },
-  { id: faker.string.uuid(), name: "Done", color: "#10B981" },
+  { id: faker.string.uuid(), name: "To Do", color: "#3B82F6", shadow:"rgba(59, 130, 246, 0.1)"},
+  { id: faker.string.uuid(), name: "In Progress", color: "#F59E0B", shadow:"rgba(255,193,7,0.1)"},
+  { id: faker.string.uuid(), name: "Completed", color: "#10B981",shadow:"rgba(16,185,129,0.1)" },
 ];
 
 const users = Array.from({ length: 4 })
@@ -59,14 +61,20 @@ const Kanban = () => {
       onDataChange={setFeatures}
     >
       {(column) => (
-        <KanbanBoard id={column.id} key={column.id}>
-          <KanbanHeader>
-            <div className="flex items-center gap-2">
-              <div
-                className="h-2 w-2 rounded-full"
+        <KanbanBoard id={column.id} key={column.id} shadowColor={column.shadow}>
+          <KanbanHeader >
+          <div className="flex items-center justify-between pr-1">
+            <div className="flex items-center gap-2  py-2 px-1">
+              
+                
+                <div
+                className="h-2 w-2 rounded-full "
                 style={{ backgroundColor: column.color }}
               />
               <span>{column.name}</span>
+              
+              </div>
+              <PlusIcon className="h-5 w-5" style={{ color: column.color }}/>
             </div>
           </KanbanHeader>
           <KanbanCards id={column.id}>

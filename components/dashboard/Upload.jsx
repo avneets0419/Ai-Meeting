@@ -49,7 +49,7 @@ export default function UploadFile({ onFileChange }) {
         className="
     flex min-h-40 flex-col items-center justify-center
     rounded-xl border border-dashed border-input p-4
-    transition-colors hover:bg-accent/50
+    transition-colors hover:bg-neutral-50 dark:hover:bg-card
     focus:outline-none focus:ring-0
     data-[dragging=true]:bg-accent/50
   "
@@ -77,7 +77,7 @@ export default function UploadFile({ onFileChange }) {
 
       {errors.length > 0 && (
         <div
-          className="flex items-center gap-1 text-xs text-destructive"
+          className="flex items-center justify-center gap-1 text-xs text-destructive"
           role="alert"
         >
           <AlertCircleIcon className="size-3 shrink-0" />

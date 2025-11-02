@@ -147,7 +147,8 @@ const chartConfig = {
   },
 };
 
-export function ChartAreaInteractive() {
+export function 
+UploadPanel() {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState("90d");
   const [uploadedFile, setUploadedFile] = React.useState(null);
@@ -191,9 +192,9 @@ export function ChartAreaInteractive() {
 
   return (
     <div>
-    <Card className="@container/card">
+    <Card className="@container/card bg-transparent">
       <CardHeader>
-        <CardTitle>Upload Meeting</CardTitle>
+        <CardTitle className="font-readex">Upload Meeting</CardTitle>
         <CardDescription>
           <span className="py-1 hidden @[540px]/card:block">
             Summarize and generate actionable taks by AI

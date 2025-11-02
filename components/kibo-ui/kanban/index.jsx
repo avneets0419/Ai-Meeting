@@ -30,24 +30,45 @@ const KanbanContext = createContext({
 export const KanbanBoard = ({
   id,
   children,
-  className
-}) => {
-  const { isOver, setNodeRef } = useDroppable({
-    id,
-  });
-
+  isOver,
+  className,
+  setNodeRef,
+  shadowColor = "rgba(0,0,0,0.9)", // default color
+}) =>{
   return (
     <div
+      ref={setNodeRef}
       className={cn(
-        "flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all",
+        "relative flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md  text-xs shadow-inner ring-2 transition-all bg-gray-50 dark:bg-neutral-900",
         isOver ? "ring-primary" : "ring-transparent",
         className
       )}
-      ref={setNodeRef}>
+      style={{
+        position: "relative",
+      }}
+    >
+      {/* Inner circular gradient shadow */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-md"
+        style={{
+          background: `radial-gradient(circle at bottom right, ${shadowColor}, transparent 30%)`,
+          mixBlendMode: "multiply",
+        }}
+      />
+
       {children}
     </div>
   );
-};
+}
+
+
+
+
+
+
+
+
+
 
 export const KanbanCard = (
   {
@@ -76,10 +97,10 @@ export const KanbanCard = (
 
   return (
     <>
-      <div style={style} {...listeners} {...attributes} ref={setNodeRef}>
+      <div style={style} {...listeners} {...attributes} ref={setNodeRef} >
         <Card
           className={cn(
-            "cursor-grab gap-4 rounded-md p-3 shadow-sm",
+            "cursor-grab gap-4 rounded-md p-3 shadow-sm h-20",
             isDragging && "pointer-events-none cursor-grabbing opacity-30",
             className
           )}>
@@ -129,7 +150,7 @@ export const KanbanHeader = ({
   className,
   ...props
 }) => (
-  <div className={cn("m-0 p-2 font-semibold text-sm", className)} {...props} />
+  <div className={cn("m-0 p-2 font-semibold text-sm ", className)} {...props} />
 );
 
 export const KanbanProvider = (

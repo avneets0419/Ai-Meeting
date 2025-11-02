@@ -143,11 +143,19 @@ export const useFileUpload = (options = {}) => {
 
       // Check file size
       if (file.size > maxSize) {
+        console.log(file)
         errors.push(multiple
           ? `Some files exceed the maximum size of ${formatBytes(maxSize)}.`
           : `File exceeds the maximum size of ${formatBytes(maxSize)}.`)
         return
       }
+      const validTypes = ["video/", "audio/"]; // prefixes
+      const isValid = validTypes.some((type) => file.type.startsWith(type));
+
+  if (!isValid) {
+    errors.push(`Please Upload Audio/Video only.`)
+    return;
+  }
 
       const error = validateFile(file)
       if (error) {
