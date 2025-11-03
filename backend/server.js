@@ -14,13 +14,8 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
   }));
 app.use(express.json());
-app.get("/test",(req,res)=>{
-    console.log("test")
-    try{ return res.status(200).json({"test":"get"})}
-    catch(err){
-        console.log(err)
-    }
-   
+app.get("/ping",(req,res)=>{
+    return res.send("Server is Active")
 })
 
 // Routes
