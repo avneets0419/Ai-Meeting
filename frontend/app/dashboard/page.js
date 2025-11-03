@@ -32,7 +32,7 @@ function dashboard() {
 
 <MeetingCard
   label="Trip"
-  title="Meeting with Bhadva"
+  title="Meeting with Sudhir"
   time="01:00 pm - 03:00 am"
   color="bg-amber-500"
 />
