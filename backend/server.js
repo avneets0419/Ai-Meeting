@@ -9,7 +9,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: "*", // or "http://localhost:3000" if you want to restrict it
+    origin: "*", 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
   }));

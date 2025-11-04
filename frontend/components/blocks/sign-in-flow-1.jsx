@@ -9,6 +9,11 @@ import * as THREE from "three";
 import Glass from "../Glass";
 import { useRouter } from "next/navigation";
 import { AudioWaveformIcon } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { OrbitalLoader } from "@/components/ui/orbital-loader";
+
+
+
 
 export const CanvasRevealEffect = ({
   animationSpeed = 10,
@@ -406,56 +411,147 @@ export const SignInPage = ({ className }) => {
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [initialCanvasVisible, setInitialCanvasVisible] = useState(true);
   const [reverseCanvasVisible, setReverseCanvasVisible] = useState(false);
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [show, setShow] = useState(false);
+  const inputRef1 = useRef(null);
+  const [error, setError] = useState("");
+  const[loading,setLoading]=useState(true)
+
+
   const router = useRouter();
 
-  const handleEmailSubmit = (e) => {
-    e.preventDefault();
-    if (email) {
-      setStep("code");
-    }
-  };
-
-  // Focus first input when code screen appears
   useEffect(() => {
-    if (step === "code") {
-      setTimeout(() => {
-        codeInputRefs.current[0]?.focus();
-      }, 500);
+    const token = localStorage.getItem("token");
+  
+    if (token) {
+      // Redirect immediately
+      router.push("/dashboard");
+  
+      // Keep showing loading for 2 seconds
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+  
+      return () => clearTimeout(timer);
+    } else {
+      // If no token, stop loading instantly
+      setLoading(false);
     }
-  }, [step]);
+  }, []);
 
-  const handleCodeChange = (index, value) => {
-    if (value.length <= 1) {
-      const newCode = [...code];
-      newCode[index] = value;
-      setCode(newCode);
+  if (loading) { return ( <div className="flex items-center justify-center h-screen text-lg font-medium"> <OrbitalLoader /> </div> ); }
+  
 
-      // Focus next input if value is entered
-      if (value && index < 5) {
-        codeInputRefs.current[index + 1]?.focus();
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email) return;
+
+    try {
+      const res = await fetch("http://localhost:8080/api/users/check-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (data.exists) {
+        // User exists → LOGIN screen
+        setStep("login");
+      } else {
+        // New user → SIGNUP screen
+        setStep("signup");
       }
-
-      // Check if code is complete
-      if (index === 5 && value) {
-        const isComplete = newCode.every((digit) => digit.length === 1);
-        if (isComplete) {
-          // First show the new reverse canvas
-          setReverseCanvasVisible(true);
-
-          // Then hide the original canvas after a small delay
-          setTimeout(() => {
-            setInitialCanvasVisible(false);
-          }, 50);
-
-          // Transition to success screen after animation
-          setTimeout(() => {
-            setStep("success");
-            router.push("/dashboard");
-          }, 2750);
-        }
-      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError(err.message);
     }
   };
+  const handleSignup = async () => {
+    if (!email || !name || !password) return;
+
+    try {
+      const res = await fetch("http://localhost:8080/api/users/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+
+
+        // show success animation
+        setReverseCanvasVisible(true);
+        setTimeout(() => setInitialCanvasVisible(false), 50);
+        setTimeout(() => {
+          setStep("success");
+          router.push("/dashboard");
+        }, 2750);
+      } else {
+        setError(data.error || "Signup failed");
+      }
+    } catch (err) {
+      console.error("Error signing up:", err);
+    }
+  };
+
+  const handleLogin = async () => {
+    if (!email || !password) return;
+
+    try {
+      const res = await fetch("http://localhost:8080/api/users/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+
+        // show success animation
+        setReverseCanvasVisible(true);
+        setTimeout(() => setInitialCanvasVisible(false), 50);
+        setTimeout(() => {
+          setStep("success");
+          router.push("/dashboard");
+        }, 2750);
+      } else {
+        setError(data.error || "Login failed");
+      }
+    } catch (err) {
+      console.error("Error logging in:", err);
+    }
+  };
+
+
+  // // Check if code is complete
+  // if (index === 5 && value) {
+  //   const isComplete = newCode.every((digit) => digit.length === 1);
+  //   if (isComplete) {
+  //     // First show the new reverse canvas
+  //     setReverseCanvasVisible(true);
+
+  //     // Then hide the original canvas after a small delay
+  //     setTimeout(() => {
+  //       setInitialCanvasVisible(false);
+  //     }, 50);
+
+  //     // Transition to success screen after animation
+  //     setTimeout(() => {
+  //       setStep("success");
+  //       router.push("/dashboard");
+  //     }, 2750);
+  //   }
+  // }
 
   const handleKeyDown = (index, e) => {
     if (e.key === "Backspace" && !code[index] && index > 0) {
@@ -465,13 +561,15 @@ export const SignInPage = ({ className }) => {
 
   const handleBackClick = () => {
     setStep("email");
-    setCode(["", "", "", "", "", ""]);
+    setPassword("");
     // Reset animations if going back
     setReverseCanvasVisible(false);
     setInitialCanvasVisible(true);
   };
 
+
   return (
+    
     <div
       className={cn(
         "flex w-[100%] flex-col min-h-screen bg-black relative",
@@ -597,7 +695,7 @@ export const SignInPage = ({ className }) => {
                       By signing up, you agree to the Privacy Policy
                     </p>
                   </motion.div>
-                ) : step === "code" ? (
+                ) : step === "login" ? (
                   <motion.div
                     key="code-step"
                     initial={{ opacity: 0, x: 100 }}
@@ -607,61 +705,50 @@ export const SignInPage = ({ className }) => {
                     className="space-y-6 text-center"
                   >
                     <div className="space-y-1">
-                      <h1 className="text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">
-                        We sent you a code
+                      <h1 className="font-readex text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">
+                        Welcome back!!
                       </h1>
-                      <p className="text-[1.25rem] text-white/50 font-light">
-                        Please enter it
+                      <p className="font-readex text-[1.25rem] text-white/50 font-light">
+                        Enter your password to continue
                       </p>
                     </div>
 
-                    <div className="w-full">
-                      <div className="relative rounded-full py-4 px-5 border border-white/10 bg-transparent">
-                        <div className="flex items-center justify-center">
-                          {code.map((digit, i) => (
-                            <div key={i} className="flex items-center">
-                              <div className="relative">
-                                <input
-                                  ref={(el) => {
-                                    codeInputRefs.current[i] = el;
-                                  }}
-                                  type="text"
-                                  inputMode="numeric"
-                                  pattern="[0-9]*"
-                                  maxLength={1}
-                                  value={digit}
-                                  onChange={(e) =>
-                                    handleCodeChange(i, e.target.value)
-                                  }
-                                  onKeyDown={(e) => handleKeyDown(i, e)}
-                                  className="w-8 text-center text-xl bg-transparent text-white border-none focus:outline-none focus:ring-0 appearance-none"
-                                  style={{ caretColor: "transparent" }}
-                                />
-                                {!digit && (
-                                  <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
-                                    <span className="text-xl text-white">
-                                      0
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                              {i < 5 && (
-                                <span className="text-white/20 text-xl">|</span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                    <div className="w-full space-y-4">
+                      {/* Password Input */}
+                      <div className="relative rounded-full py-4 px-5 border border-white/10 bg-transparent flex items-center justify-between">
+                        <input
+                          ref={inputRef1}
+                          type={show ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            setError("");
+                          }}
+                          placeholder="Enter your password"
+                          className="w-full bg-transparent text-white placeholder-white/40 text-xl border-none focus:outline-none focus:ring-0 appearance-none"
+                          style={{ caretColor: "white" }}
+                        />
+                        <motion.button
+                          onClick={() => setShow(!show)}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          transition={{ duration: 0.2 }}
+                          className="ml-3 text-white/60 hover:text-white"
+                        >
+                          {show ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </motion.button>
                       </div>
-                    </div>
-
-                    <div>
-                      <motion.p
-                        className="text-white/50 hover:text-white/70 transition-colors cursor-pointer text-sm"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        Resend code
-                      </motion.p>
+                      {error && (
+                        <p
+                          style={{
+                            color: "red",
+                            fontSize: "0.9rem",
+                            marginTop: "4px",
+                          }}
+                        >
+                          {error}
+                        </p>
+                      )}
                     </div>
 
                     <div className="flex w-full gap-3">
@@ -676,11 +763,12 @@ export const SignInPage = ({ className }) => {
                       </motion.button>
                       <motion.button
                         className={`flex-1 rounded-full font-medium py-3 border transition-all duration-300 ${
-                          code.every((d) => d !== "")
+                          password.trim()
                             ? "bg-white text-black border-transparent hover:bg-white/90 cursor-pointer"
                             : "bg-[#111] text-white/50 border-white/10 cursor-not-allowed"
                         }`}
-                        disabled={!code.every((d) => d !== "")}
+                        disabled={!password.trim()}
+                        onClick={handleLogin}
                       >
                         Continue
                       </motion.button>
@@ -688,42 +776,100 @@ export const SignInPage = ({ className }) => {
 
                     <div className="pt-16">
                       <p className="text-xs text-white/40">
-                        By signing up, you agree to the{" "}
-                        <Link
-                          href="#"
-                          className="underline text-white/40 hover:text-white/60 transition-colors"
+                        By signing up, you agree to the Terms and Condition
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : step === "signup" ? (
+                  <motion.div
+                    key="code-step"
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 100 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className="space-y-6 text-center"
+                  >
+                    <div className="space-y-1">
+                      <h1 className="font-readex text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">
+                        Create Account
+                      </h1>
+                      <p className="font-readex text-[1.25rem] text-white/50 font-light">
+                        Welcome to Meet Wise, Your Meeting Buddy
+                      </p>
+                    </div>
+
+                    <div className="w-full space-y-4">
+                      {/* Password Input */}
+                      <div className="relative rounded-full py-4 px-5 border border-white/10 bg-transparent flex items-center justify-between">
+                        <input
+                          type={"text"}
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="Name"
+                          className="w-full bg-transparent text-white placeholder-white/40 text-xl border-none focus:outline-none focus:ring-0 appearance-none"
+                          style={{ caretColor: "white" }}
+                        />
+                      </div>
+
+                      <div className="relative rounded-full py-4 px-5 border border-white/10 bg-transparent flex items-center justify-between">
+                        <input
+                          ref={inputRef1}
+                          type={show ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Create password"
+                          className="w-full bg-transparent text-white placeholder-white/40 text-xl border-none focus:outline-none focus:ring-0 appearance-none"
+                          style={{ caretColor: "white" }}
+                        />
+                        <motion.button
+                          onClick={() => setShow(!show)}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          transition={{ duration: 0.2 }}
+                          className="ml-3 text-white/60 hover:text-white"
                         >
-                          MSA
-                        </Link>
-                        ,{" "}
-                        <Link
-                          href="#"
-                          className="underline text-white/40 hover:text-white/60 transition-colors"
+                          {show ? <EyeOff size={20} /> : <Eye size={20} />}
+                        </motion.button>
+                      </div>
+
+                      {error && (
+                        <p
+                          style={{
+                            color: "red",
+                            fontSize: "0.9rem",
+                            marginTop: "4px",
+                          }}
                         >
-                          Product Terms
-                        </Link>
-                        ,{" "}
-                        <Link
-                          href="#"
-                          className="underline text-white/40 hover:text-white/60 transition-colors"
-                        >
-                          Policies
-                        </Link>
-                        ,{" "}
-                        <Link
-                          href="#"
-                          className="underline text-white/40 hover:text-white/60 transition-colors"
-                        >
-                          Privacy Notice
-                        </Link>
-                        , and{" "}
-                        <Link
-                          href="#"
-                          className="underline text-white/40 hover:text-white/60 transition-colors"
-                        >
-                          Cookie Notice
-                        </Link>
-                        .
+                          {error}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex w-full gap-3">
+                      <motion.button
+                        onClick={handleBackClick}
+                        className="rounded-full bg-white text-black font-medium px-8 py-3 hover:bg-white/90 transition-colors w-[30%]"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Back
+                      </motion.button>
+                      <motion.button
+                        className={`flex-1 rounded-full font-medium py-3 border transition-all duration-300 ${
+                          name.trim() && password.trim()
+                            ? "bg-white text-black border-transparent hover:bg-white/90 cursor-pointer"
+                            : "bg-[#111] text-white/50 border-white/10 cursor-not-allowed"
+                        }`}
+                        disabled={!name.trim() || !password.trim()}
+                        onClick={handleSignup}
+                      >
+                        Continue
+                      </motion.button>
+                    </div>
+
+                    <div className="pt-16">
+                      <p className="text-xs text-white/40">
+                        By signing up, you agree to the Terms and Condition
                       </p>
                     </div>
                   </motion.div>
@@ -771,6 +917,7 @@ export const SignInPage = ({ className }) => {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1 }}
                       className="w-full rounded-full bg-white text-black font-medium py-3 hover:bg-white/90 transition-colors"
+                      onClick={()=>router.push("/dashboard")}
                     >
                       Continue to Dashboard
                     </motion.button>
