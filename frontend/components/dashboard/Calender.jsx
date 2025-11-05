@@ -11,7 +11,8 @@ import { EventCalendar } from "../event-calendar"
 
 export default function Calender() {
   const [events, setEvents] = useState([])
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const handleEventAdd = async (event) => {
     const token = localStorage.getItem("token");
     const res = await fetch(`${API_URL}/api/events`, {

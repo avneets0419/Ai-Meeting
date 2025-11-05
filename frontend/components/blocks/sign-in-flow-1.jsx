@@ -417,7 +417,7 @@ export const SignInPage = ({ className }) => {
   const inputRef1 = useRef(null);
   const [error, setError] = useState("");
   const[loading,setLoading]=useState(true)
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
   const router = useRouter();
