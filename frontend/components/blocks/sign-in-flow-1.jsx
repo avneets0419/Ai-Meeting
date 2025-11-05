@@ -417,6 +417,7 @@ export const SignInPage = ({ className }) => {
   const inputRef1 = useRef(null);
   const [error, setError] = useState("");
   const[loading,setLoading]=useState(true)
+  const API_URL = process.env.REACT_APP_API_URL;
 
 
   const router = useRouter();
@@ -449,7 +450,7 @@ export const SignInPage = ({ className }) => {
     if (!email) return;
 
     try {
-      const res = await fetch("https://ai-meeting-2xf8.onrender.com/api/users/check-email", {
+      const res = await fetch(`${API_URL}/api/users/check-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -475,7 +476,7 @@ export const SignInPage = ({ className }) => {
     if (!email || !name || !password) return;
 
     try {
-      const res = await fetch("https://ai-meeting-2xf8.onrender.com/api/users/auth", {
+      const res = await fetch(`${API_URL}/api/users/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, name, password }),
@@ -506,7 +507,7 @@ export const SignInPage = ({ className }) => {
     if (!email || !password) return;
 
     try {
-      const res = await fetch("https://ai-meeting-2xf8.onrender.com/api/users/auth", {
+      const res = await fetch(`${API_URL}/api/users/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

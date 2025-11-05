@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import auth from "./routes/auth.js";
+import eventRoutes from "./routes/events.js"
 
 dotenv.config();
 connectDB();
@@ -20,6 +21,7 @@ app.get("/ping",(req,res)=>{
 
 // Routes
 app.use("/api/users", auth);
+app.use("/api/events", eventRoutes);
 
 
 const PORT = process.env.PORT || 8080;

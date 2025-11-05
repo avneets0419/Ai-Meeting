@@ -1,17 +1,69 @@
+"use client"
 import { SectionCards } from '@/components/section-cards'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import EventCalender from '@/components/dashboard/EventCalender'
 import { UploadPanel } from '@/components/UploadPanel'
 import MeetingCard from '@/components/ui/MeetingCard'
 import { RecentMeetings } from '@/components/dashboard/RecentMeetings'
+import { useRouter } from 'next/navigation';
+import { OrbitalLoader } from '@/components/ui/orbital-loader'
 
-function dashboard() {
+
+function Dashboard() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/signup");
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/api/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          setUser(data);
+        } else {
+          console.error(data.error);
+        }
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      } finally {
+        setTimeout(() => setLoading(false), 1500); // simulate loading
+      }
+    };
+
+    fetchUser();
+  }, [router]);
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/signup");
+    }
+  }, [loading, user, router]);
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-lg font-medium">
+        <OrbitalLoader/>
+      </div>
+    );
+  }
+
+
+
+  
   
   return (
     <div className="flex h-screen overflow-hidden ">
       <div className="w-5/7 overflow-y-auto border-r border-gray-300 dark:border-neutral-900 p-6 no-scrollbar">
       <div className='py-4 pb-8'>
-      <h1 className='font-readex font-semibold text-5xl text-foreground'>Hello Avneet</h1> 
+      <h1 className='font-readex font-semibold text-5xl text-foreground'>Hello {user.name}</h1> 
       <p className='font-readex text-1xl text-muted-foreground'>Welcome to Meet AI, your personal meeting assistant</p>
       </div>
       <SectionCards />
@@ -22,21 +74,6 @@ function dashboard() {
       </div>
       <div className="flex-1 overflow-y-auto p-4">
         <EventCalender/>
-        <h1 className='font-readex font-semibold text-2xl text-foreground pb-2'>Meetings</h1>
-        <MeetingCard
-  label="Trip"
-  title="Read online reviews"
-  time="01:00 pm - 03:00 am"
-  color="bg-cyan-500"
-/>
-
-<MeetingCard
-  label="Trip"
-  title="Meeting with Sudhir"
-  time="01:00 pm - 03:00 am"
-  color="bg-amber-500"
-/>
-      {/* <DataTable data={data} /> */}
 
       </div>
     </div>
@@ -68,4 +105,4 @@ function dashboard() {
   )
 }
 
-export default dashboard
+export default Dashboard
