@@ -11,7 +11,7 @@ const EventCalender = () => {
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   // ✅ Fetch events on mount
   useEffect(() => {
