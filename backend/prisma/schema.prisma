@@ -20,6 +20,7 @@ model User {
   createdAt DateTime @default(now())
   meetings  Meeting[]
   events  Event[]
+  tasks Task[]
 }
 
 model Meeting {
@@ -42,6 +43,19 @@ model Event {
   location    String?
   userId      String   @db.ObjectId
   user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Task {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  status      String   // "todo" | "in-progress" | "completed"
+  startAt     DateTime
+  endAt       DateTime
+  ownerId     String   @db.ObjectId
+  owner       User     @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

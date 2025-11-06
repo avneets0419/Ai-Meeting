@@ -30,16 +30,17 @@ const KanbanContext = createContext({
 export const KanbanBoard = ({
   id,
   children,
-  isOver,
   className,
-  setNodeRef,
   shadowColor = "rgba(0,0,0,0.9)", // default color
-}) =>{
+}) => {
+  // 🧩 make this column droppable
+  const { setNodeRef, isOver } = useDroppable({ id });
+
   return (
     <div
       ref={setNodeRef}
       className={cn(
-        "relative flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md  text-xs shadow-inner ring-2 transition-all bg-gray-50 dark:bg-neutral-900",
+        "relative flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md text-xs shadow-inner ring-2 transition-all bg-gray-50 dark:bg-neutral-900",
         isOver ? "ring-primary" : "ring-transparent",
         className
       )}
@@ -55,11 +56,11 @@ export const KanbanBoard = ({
           mixBlendMode: "multiply",
         }}
       />
-
       {children}
     </div>
   );
-}
+};
+
 
 
 
@@ -178,60 +179,85 @@ export const KanbanProvider = (
     onDragStart?.(event);
   };
 
-  const handleDragOver = (event) => {
-    const { active, over } = event;
+  // replace existing handleDragOver with this
+const handleDragOver = (event) => {
+  const { active, over } = event;
 
-    if (!over) {
-      return;
-    }
+  if (!over) return;
 
-    const activeItem = data.find((item) => item.id === active.id);
-    const overItem = data.find((item) => item.id === over.id);
+  const activeItem = data.find((item) => item.id === active.id);
+  const overItem = data.find((item) => item.id === over.id);
 
-    if (!activeItem) {
-      return;
-    }
+  if (!activeItem) return;
 
-    const activeColumn = activeItem.column;
-    const overColumn =
-      overItem?.column ||
-      columns.find((col) => col.id === over.id)?.id ||
-      columns[0]?.id;
+  const activeColumn = activeItem.column;
+  const overColumn =
+    overItem?.column ||
+    columns.find((col) => col.id === over.id)?.id ||
+    columns[0]?.id;
 
-    if (activeColumn !== overColumn) {
-      let newData = [...data];
-      const activeIndex = newData.findIndex((item) => item.id === active.id);
-      const overIndex = newData.findIndex((item) => item.id === over.id);
-
-      newData[activeIndex].column = overColumn;
-      newData = arrayMove(newData, activeIndex, overIndex);
-
-      onDataChange?.(newData);
-    }
-
-    onDragOver?.(event);
-  };
-
-  const handleDragEnd = (event) => {
-    setActiveCardId(null);
-
-    onDragEnd?.(event);
-
-    const { active, over } = event;
-
-    if (!over || active.id === over.id) {
-      return;
-    }
-
+  if (activeColumn !== overColumn) {
     let newData = [...data];
+    const activeIndex = newData.findIndex((item) => item.id === active.id);
+    const overIndex = newData.findIndex((item) => item.id === over.id);
 
-    const oldIndex = newData.findIndex((item) => item.id === active.id);
-    const newIndex = newData.findIndex((item) => item.id === over.id);
+    // update column and order
+    newData[activeIndex].column = overColumn;
+    newData = arrayMove(newData, activeIndex, overIndex);
 
-    newData = arrayMove(newData, oldIndex, newIndex);
+    // metadata so consumers know exactly what moved
+    const meta = {
+      movedItem: activeItem,
+      fromColumnId: activeColumn,
+      toColumnId: overColumn,
+      fromIndex: activeIndex,
+      toIndex: overIndex,
+      triggeredBy: "dragOver",
+    };
 
-    onDataChange?.(newData);
+    onDataChange?.(newData, meta);
+  }
+
+  onDragOver?.(event);
+  console.log("🧠 activeColumn:", activeColumn, "over.id:", over.id, "→ resolved overColumn:", overColumn);
+};
+
+  // replace existing handleDragEnd with this
+const handleDragEnd = (event) => {
+  setActiveCardId(null);
+  onDragEnd?.(event);
+
+  const { active, over } = event;
+  if (!over || active.id === over.id) return;
+
+  let newData = [...data];
+
+  const oldIndex = newData.findIndex((item) => item.id === active.id);
+  const newIndex = newData.findIndex((item) => item.id === over.id);
+
+  const activeItem = newData[oldIndex];
+  const oldColumn = activeItem?.column;
+  const newColumn =
+    newData[newIndex]?.column ||
+    columns.find((col) => col.id === over.id)?.id ||
+    oldColumn;
+
+  // set column if it changed and reorder
+  newData[oldIndex].column = newColumn;
+  newData = arrayMove(newData, oldIndex, newIndex);
+
+  const meta = {
+    movedItem: activeItem,
+    fromColumnId: oldColumn,
+    toColumnId: newColumn,
+    fromIndex: oldIndex,
+    toIndex: newIndex,
+    triggeredBy: "dragEnd",
   };
+
+  onDataChange?.(newData, meta);
+};
+
 
   const announcements = {
     onDragStart({ active }) {

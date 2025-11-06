@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import auth from "./routes/auth.js";
 import eventRoutes from "./routes/events.js"
+import taskRoutes from "./routes/tasks.js";
 
 dotenv.config();
 connectDB();
@@ -21,6 +22,7 @@ app.get("/ping",(req,res)=>{
 
 // Routes
 app.use("/api/users", auth);
+app.use("/api/tasks", taskRoutes);
 app.use("/api/events", eventRoutes);
 
 
