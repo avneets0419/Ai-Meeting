@@ -9,10 +9,12 @@ import { useRouter } from 'next/navigation';
 import { OrbitalLoader } from '@/components/ui/orbital-loader'
 
 
+
 function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,7 +25,7 @@ function Dashboard() {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/users/me", {
+        const res = await fetch(`${API_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
