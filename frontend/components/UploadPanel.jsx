@@ -158,18 +158,23 @@ UploadPanel() {
     setUploadedFile(file);
   };
 
-  const handleSubmit = () => {
-    console.log("Submitting file:", uploadedFile);
-    // your submit logic (API, Firestore, etc.)
-    setLoading(true);
-
-    // Fake process time
-    setTimeout(() => {
-      setLoading(false);
-      alert("Upload complete!");
-    }, 8000);
-  };
-
+  async function handleUpload(file) {
+    const formData = new FormData();
+    formData.append("audio", file); // 👈 MUST match upload.single("audio")
+  
+    try {
+      const res = await fetch("http://localhost:8080/api/transcribe", {
+        method: "POST",
+        body: formData, // 👈 no need to set headers manually
+      });
+  
+      const data = await res.json();
+      console.log("🎧 Started transcription:", data);
+    } catch (err) {
+      console.error("❌ Upload failed:", err);
+    }
+  }
+  
   React.useEffect(() => {
     if (isMobile) {
       setTimeRange("7d");

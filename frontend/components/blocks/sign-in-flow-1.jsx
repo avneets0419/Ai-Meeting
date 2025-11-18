@@ -12,9 +12,6 @@ import { AudioWaveformIcon } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
 import { OrbitalLoader } from "@/components/ui/orbital-loader";
 
-
-
-
 export const CanvasRevealEffect = ({
   animationSpeed = 10,
   opacities = [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1],
@@ -416,24 +413,23 @@ export const SignInPage = ({ className }) => {
   const [show, setShow] = useState(false);
   const inputRef1 = useRef(null);
   const [error, setError] = useState("");
-  const[loading,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true);
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-  
+
     if (token) {
       // Redirect immediately
       router.push("/dashboard");
-  
+
       // Keep showing loading for 2 seconds
       const timer = setTimeout(() => {
         setLoading(false);
       }, 2000);
-  
+
       return () => clearTimeout(timer);
     } else {
       // If no token, stop loading instantly
@@ -441,8 +437,14 @@ export const SignInPage = ({ className }) => {
     }
   }, []);
 
-  if (loading) { return ( <div className="flex items-center justify-center h-screen text-lg font-medium"> <OrbitalLoader /> </div> ); }
-  
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-lg font-medium">
+        {" "}
+        <OrbitalLoader />{" "}
+      </div>
+    );
+  }
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -487,7 +489,6 @@ export const SignInPage = ({ className }) => {
       if (res.ok) {
         localStorage.setItem("token", data.token);
 
-
         // show success animation
         setReverseCanvasVisible(true);
         setTimeout(() => setInitialCanvasVisible(false), 50);
@@ -501,6 +502,10 @@ export const SignInPage = ({ className }) => {
     } catch (err) {
       console.error("Error signing up:", err);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8080/api/users/google";
   };
 
   const handleLogin = async () => {
@@ -532,7 +537,6 @@ export const SignInPage = ({ className }) => {
       console.error("Error logging in:", err);
     }
   };
-
 
   // // Check if code is complete
   // if (index === 5 && value) {
@@ -568,9 +572,7 @@ export const SignInPage = ({ className }) => {
     setInitialCanvasVisible(true);
   };
 
-
   return (
-    
     <div
       className={cn(
         "flex w-[100%] flex-col min-h-screen bg-black relative",
@@ -652,7 +654,10 @@ export const SignInPage = ({ className }) => {
                     </div>
 
                     <div className="space-y-4">
-                      <button className="font-readex backdrop-blur-[2px] w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-full py-3 px-4 transition-colors">
+                      <button
+                        className="font-readex backdrop-blur-[2px] w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-full py-3 px-4 transition-colors"
+                        onClick={handleGoogleLogin}
+                      >
                         <span className=" text-lg">G</span>
                         <span>Sign in with Google</span>
                       </button>
@@ -918,7 +923,7 @@ export const SignInPage = ({ className }) => {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1 }}
                       className="w-full rounded-full bg-white text-black font-medium py-3 hover:bg-white/90 transition-colors"
-                      onClick={()=>router.push("/dashboard")}
+                      onClick={() => router.push("/dashboard")}
                     >
                       Continue to Dashboard
                     </motion.button>

@@ -5,7 +5,7 @@ import EventCalender from '@/components/dashboard/EventCalender'
 import { UploadPanel } from '@/components/UploadPanel'
 import MeetingCard from '@/components/ui/MeetingCard'
 import { RecentMeetings } from '@/components/dashboard/RecentMeetings'
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { OrbitalLoader } from '@/components/ui/orbital-loader'
 
 
@@ -15,6 +15,15 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token) {
+      localStorage.setItem("token", token);
+      router.replace("/dashboard");
+    }
+  }, [searchParams, router]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
