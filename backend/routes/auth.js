@@ -1,13 +1,54 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
 import { PrismaClient } from '@prisma/client';
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import dotenv from "dotenv";
 
 
 
 const router = express.Router();
 const prisma = new PrismaClient();
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  async (req, res) => {
+    try {
+      const user = req.user;
+
+      let existing = await prisma.user.findFirst({
+        where: { googleId: user.googleId }
+      });
+
+      if (!existing) {
+        existing = await prisma.user.create({
+          data: {
+            googleId: user.googleId,
+            name: user.name,
+            email: user.email,
+            avatar: user.photo,
+          },
+        });
+      }
+
+      const token = jwt.sign(
+        { id: existing.id, email: existing.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+      );
+
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/auth/callback?token=${token}`
+      );
+    } catch (err) {
+      console.error("Google login error:", err);
+      res.status(500).json({ error: "Google login failed" });
+    }
+  }
+);
+
 
 // Check email — decides login or signup
 router.post("/check-email", async (req, res) => {
