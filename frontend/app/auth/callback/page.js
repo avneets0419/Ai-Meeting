@@ -21,7 +21,7 @@ function CallbackHandler() {
     router.replace("/dashboard");
   }, [token, router]);
 
-  return <div className="flex justify-center items-center"><OrbitalLoader/></div>;
+  return <div className="flex justify-center items-center h-100dvh"><OrbitalLoader/></div>;
 }
 
 // Export page with Suspense wrapper
