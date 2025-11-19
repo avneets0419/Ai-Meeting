@@ -505,7 +505,7 @@ export const SignInPage = ({ className }) => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/api/users/google";
+    window.location.href = `${API_URL}/api/users/google`;
   };
 
   const handleLogin = async () => {
