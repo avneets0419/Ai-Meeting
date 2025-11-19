@@ -1,20 +1,33 @@
 "use client";
 
-import { OrbitalLoader } from "@/components/ui/orbital-loader";
-import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function CallbackPage() {
-  const params = useSearchParams();
+// Component that actually reads params
+function CallbackHandler() {
   const router = useRouter();
-  const token = params.get("token");
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
   useEffect(() => {
-    if (token) {
-      localStorage.setItem("token", token);
-      router.push("/dashboard");
-    }
-  }, [token]);
+    if (!token) return;
 
-  return <div className="flex justify-center items-center"><OrbitalLoader/></div>;
+    // Save token
+    localStorage.setItem("token", token);
+
+    // Redirect
+    router.replace("/dashboard");
+  }, [token, router]);
+
+  return <div>Signing you in...</div>;
+}
+
+// Export page with Suspense wrapper
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CallbackHandler />
+    </Suspense>
+  );
 }
