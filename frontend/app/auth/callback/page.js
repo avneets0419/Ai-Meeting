@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { OrbitalLoader } from "@/components/ui/orbital-loader";
 
 // Component that actually reads params
 function CallbackHandler() {
@@ -20,13 +21,13 @@ function CallbackHandler() {
     router.replace("/dashboard");
   }, [token, router]);
 
-  return <div>Signing you in...</div>;
+  return <div className="flex justify-center items-center"><OrbitalLoader/></div>;
 }
 
 // Export page with Suspense wrapper
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex justify-center items-center"><OrbitalLoader/></div>}>
       <CallbackHandler />
     </Suspense>
   );
