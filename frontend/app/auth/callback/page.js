@@ -27,7 +27,7 @@ function CallbackHandler() {
 // Export page with Suspense wrapper
 export default function Page() {
   return (
-    <Suspense fallback={<div className="flex justify-center items-center"><OrbitalLoader/></div>}>
+    <Suspense fallback={<div className="flex justify-center items-center h-100dvh"><OrbitalLoader/></div>}>
       <CallbackHandler />
     </Suspense>
   );
