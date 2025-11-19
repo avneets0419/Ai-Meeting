@@ -74,8 +74,8 @@ function Dashboard() {
     <div className="flex h-screen overflow-hidden ">
       <div className="w-5/7 overflow-y-auto border-r border-gray-300 dark:border-neutral-900 p-6 no-scrollbar">
       <div className='py-4 pb-8'>
-      <h1 className='font-readex font-semibold text-5xl text-foreground'>Hello {user.name}</h1> 
-      <p className='font-readex text-1xl text-muted-foreground'>Welcome to Meet AI, your personal meeting assistant</p>
+      <h1 className='font-readex font-semibold text-5xl text-foreground'>Hello {user.name.split(" ")[0]}</h1> 
+      <p className='pt-1 font-readex text-1xl text-muted-foreground'>Welcome to Meet AI, your personal meeting assistant</p>
       </div>
       <SectionCards />
       <div className='py-4'>
