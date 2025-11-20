@@ -339,7 +339,7 @@ export function AppSidebar() {
             >
               <Avatar className="h-10 w-10 ">
                 <AvatarImage
-                  src=""
+                  src={user?.avatar ? user.avatar : undefined}
                   alt="@shadcn"
                 />
                 <AvatarFallback className="bg-gray-200 text-black font-medium dark:bg-muted dark:text-white ">{getInitials(user?.name)}</AvatarFallback>
