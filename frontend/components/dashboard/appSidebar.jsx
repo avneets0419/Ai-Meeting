@@ -81,6 +81,7 @@ import { OrbitalLoader } from "../ui/orbital-loader";
 
 import { useContext } from "react";
 import { UserContext } from "../../app/providers/UserProvider";
+import Link from "next/link"
 
 function getInitials(name) {
   if (!name || typeof name !== "string") return "?";
@@ -171,47 +172,47 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/dashboard"}>
-                  <a href="/dashboard">
+                  <Link href="/dashboard">
                     <Home />
                     <span>Dashboard</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/dashboard/calendar"}>
-                  <a href="/dashboard/calendar">
+                  <Link href="/dashboard/calendar">
                   <Calendar1/>
                     <span>Calendar</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/dashboard/meetings">
+                  <Link href="/dashboard/meetings">
                     <ListTodo />
 
                     <span>My Meetings</span>
-                  </a>
+                  </Link>
 
                 </SidebarMenuButton>
               </SidebarMenuItem> */}
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/dashboard/summaries"}>
-                  <a href="/dashboard/summaries">
+                  <Link href="/dashboard/summaries">
                     <FileText />
                     <span>Summaries</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === "/dashboard/tasks"}>
-                  <a href="/dashboard/tasks">
+                  <Link href="/dashboard/tasks">
                     <ClipboardCheck />
                     <span>Action Items</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -257,7 +258,7 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput placeholder="Type Link command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
