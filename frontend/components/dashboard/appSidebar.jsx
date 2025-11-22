@@ -79,11 +79,22 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { OrbitalLoader } from "../ui/orbital-loader";
 
-function getInitials(name = "") {
-  const parts = name.trim().split(" ");
-  if (parts.length === 1) return parts[0][0].toUpperCase(); 
+import { useContext } from "react";
+import { UserContext } from "../../app/providers/UserProvider";
 
-  return (parts[0][0] + parts[1][0]).toUpperCase();
+function getInitials(name) {
+  if (!name || typeof name !== "string") return "?";
+
+  const parts = name.trim().split(/\s+/);
+
+  if (parts.length === 1) {
+    return parts[0]?.[0]?.toUpperCase() || "?";
+  }
+
+  return (
+    (parts[0]?.[0] || "") +
+    (parts[1]?.[0] || "")
+  ).toUpperCase();
 }
 
 
@@ -95,39 +106,11 @@ export function AppSidebar() {
   const { open } = useSidebar();
   const { theme, setTheme } = useTheme(); // Get theme and setTheme
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [user, setUser] = useState(null);
+
   const [searchOpen, setSearchOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/signup");
-      return;
-    }
-  
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/users/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-  
-        if (res.ok) {
-          setUser(data);
-        } else {
-          console.error(data.error);
-          router.push("/signup");
-        }
-      } catch (err) {
-        console.error("Error fetching user:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchUser();
-  }, []);
-  
+
+
+  const {user} = useContext(UserContext)
   React.useEffect(() => {
     const down = (e) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -141,15 +124,14 @@ export function AppSidebar() {
   }, [])
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (loading) {
-    return (<div></div>)
-  }
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");   
     router.push("/signup");            
   };
 
+  if (!user) return null;
 
   return (
     

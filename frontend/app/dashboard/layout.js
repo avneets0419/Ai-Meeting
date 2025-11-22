@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/dashboard/appSidebar"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import React, { useState } from "react"
 import { HeroUIProvider } from "@heroui/system"
+import UserProvider from "../providers/UserProvider";
 
 
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
   return (
     
         <Providers>
+          <UserProvider>
           <HeroUIProvider>
           <SidebarProvider>
             <div className="flex h-screen w-screen overflow-hidden">
@@ -36,6 +38,7 @@ export default function RootLayout({ children }) {
             </div>
           </SidebarProvider>
           </HeroUIProvider>
+          </UserProvider>
         </Providers>
   )
 }
