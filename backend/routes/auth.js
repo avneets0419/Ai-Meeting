@@ -154,5 +154,43 @@ router.get("/me", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+router.put("/update", async (req, res) => {
+  try {
+    const tokenHeader = req.headers.authorization;
+    if (!tokenHeader)
+      return res.status(401).json({ error: "No token provided" });
+
+    const token = tokenHeader.split(" ")[1];
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ error: "Invalid or expired token" });
+    }
+
+    const { name, avatar } = req.body;
+
+    if (!name && !avatar) {
+      return res.status(400).json({ error: "Nothing to update" });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: decoded.id },
+      data: {
+        ...(name && { name }),
+        ...(avatar && { avatar }),
+      },
+    });
+
+    res.json({
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.error("Update user error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 export default router;

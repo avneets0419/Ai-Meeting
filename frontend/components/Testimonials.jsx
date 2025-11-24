@@ -8,7 +8,7 @@ const testimonials = [
       avatar:
         "https://images.unsplash.com/photo-1530268729831-4b0b9e170218?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=150&h=150&fit=crop&qcrop=face",
     },
-    text: "MeetAI saves me hours every week. The summaries are incredibly precise and capture every key point discussed in meetings.",
+    text: "Meet Wise saves me hours every week. The summaries are incredibly precise and capture every key point discussed in meetings.",
     
   },
   {
@@ -28,7 +28,7 @@ const testimonials = [
       avatar:
         "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=150&h=150&fit=crop&crop=face",
     },
-    text: "Seamless, smart, and fast — MeetAI turns long meetings into crisp, actionable summaries instantly. Love the simplicity!",
+    text: "Seamless, smart, and fast — Meet Wise turns long meetings into crisp, actionable summaries instantly. Love the simplicity!",
     
   },
 ];
@@ -37,7 +37,7 @@ export function Testimonials() {
   return (
     <TestimonialsSection
       title="Loved by professionals"
-      description="Experience how teams use MeetAI to replace long, messy notes with instant AI-powered summaries."
+      description="Experience how teams use Meet Wise to replace long, messy notes with instant AI-powered summaries."
       testimonials={testimonials}
     />
   );

@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react"
+import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -53,12 +53,7 @@ import { CreditCard, Bell, User, ArrowUpRight } from "lucide-react";
 import { SearchCommand } from "../searchCommand";
 import { useState } from "react";
 import { Kbd } from "@heroui/kbd";
-import {
-  Calculator,
-  Calendar,
-
-  Smile,
-} from "lucide-react"
+import { Calculator, Calendar, Smile } from "lucide-react";
 
 import {
   CommandDialog,
@@ -69,7 +64,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -81,7 +76,8 @@ import { OrbitalLoader } from "../ui/orbital-loader";
 
 import { useContext } from "react";
 import { UserContext } from "../../app/providers/UserProvider";
-import Link from "next/link"
+import Link from "next/link";
+import UpdateProfileModal from "./UpdateProfileModal";
 
 function getInitials(name) {
   if (!name || typeof name !== "string") return "?";
@@ -92,77 +88,65 @@ function getInitials(name) {
     return parts[0]?.[0]?.toUpperCase() || "?";
   }
 
-  return (
-    (parts[0]?.[0] || "") +
-    (parts[1]?.[0] || "")
-  ).toUpperCase();
+  return ((parts[0]?.[0] || "") + (parts[1]?.[0] || "")).toUpperCase();
 }
-
-
-
 
 export function AppSidebar() {
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
   const { open } = useSidebar();
   const { theme, setTheme } = useTheme(); // Get theme and setTheme
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const [searchOpen, setSearchOpen] = useState(false);
 
-
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext);
   React.useEffect(() => {
     const down = (e) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setSearchOpen((open) => !open)
+        e.preventDefault();
+        setSearchOpen((open) => !open);
       }
-    }
+    };
 
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-
   const handleLogout = () => {
-    localStorage.removeItem("token");   
-    router.push("/signup");            
+    localStorage.removeItem("token");
+    router.push("/signup");
   };
 
   if (!user) return null;
 
   return (
-    
     <Sidebar variant="floating" collapsible="icon">
-      
       {/* Branding */}
       <SidebarHeader>
         <div className="flex items-center gap-2">
           <div className="bg-primary p-1 text-black rounded-md h-8 w-8 flex items-center justify-center font-bold">
             <Brain className="text-white" />
           </div>
-          <span className="font-semibold text-lg truncate">MeetAI</span>
+          <span className="font-semibold text-lg truncate">Meet Wise</span>
         </div>
 
         <SidebarMenu className="mt-3 w-full">
           <SidebarMenuItem>
-          <MeetingUploadModal>
-            <SidebarMenuButton asChild>
-
-              <button className="flex items-center gap-2 cursor-pointer bg-primary font-semibold text-white px-3 py-2 rounded-md hover:bg-purple-300 transition w-full ">
-                <IconCirclePlusFilled className="w-4 h-4" />
-                <span>New Meeting</span>
-              </button>
-
-            </SidebarMenuButton>
+            <MeetingUploadModal>
+              <SidebarMenuButton asChild>
+                <button className="flex items-center gap-2 cursor-pointer bg-primary font-semibold text-white px-3 py-2 rounded-md hover:bg-purple-300 transition w-full ">
+                  <IconCirclePlusFilled className="w-4 h-4" />
+                  <span>New Meeting</span>
+                </button>
+              </SidebarMenuButton>
             </MeetingUploadModal>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      
 
       <SidebarContent className="overflow-y-auto overflow-x-hidden">
         {/* Core Navigation */}
@@ -179,9 +163,12 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/dashboard/calendar"}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/dashboard/calendar"}
+                >
                   <Link href="/dashboard/calendar">
-                  <Calendar1/>
+                    <Calendar1 />
                     <span>Calendar</span>
                   </Link>
                 </SidebarMenuButton>
@@ -199,7 +186,11 @@ export function AppSidebar() {
               </SidebarMenuItem> */}
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/dashboard/summaries"}>
+                <SidebarMenuButton 
+                  asChild
+                  isActive={pathname === "/dashboard/summaries"}
+                  
+                >
                   <Link href="/dashboard/summaries">
                     <FileText />
                     <span>Summaries</span>
@@ -208,15 +199,16 @@ export function AppSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/dashboard/tasks"}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/dashboard/tasks"}
+                >
                   <Link href="/dashboard/tasks">
                     <ClipboardCheck />
                     <span>Action Items</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
-              
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -229,80 +221,83 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild><div
-        onClick={() => setSearchOpen(true)} // 👈 clicking anywhere opens search
-        className="flex items-center gap-2 cursor-pointer"
-      >
-        <Search className="h-4 w-4" />
-        <button
-        onClick={() => setSearchOpen(true)}
-        className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted transition"
-      >
-        
-        <span>Search</span>
+                <SidebarMenuButton asChild>
+                  <div
+                    onClick={() => setSearchOpen(true)} // 👈 clicking anywhere opens search
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <Search className="h-4 w-4" />
+                    <button
+                      onClick={() => setSearchOpen(true)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-md hover:bg-muted transition"
+                    >
+                      <span>Search</span>
 
-        <Kbd
-          className="ml-auto rounded-md border px-1.5 py-0.5 text-xs font-medium
+                      <Kbd
+                        className="ml-auto rounded-md border px-1.5 py-0.5 text-xs font-medium
     text-muted-foreground bg-muted shadow-sm
     dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700
     outline-none focus:outline-none align-middle leading-none"
-          keys={["command"]}
-        >
-          K
-        </Kbd>
-
-      </button>
-
-      </div>
-
+                        keys={["command"]}
+                      >
+                        K
+                      </Kbd>
+                    </button>
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-<CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
-        <CommandInput placeholder="Type Link command or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <User />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <Settings />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
-              
+              <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+                <CommandInput placeholder="Type Link command or search..." />
+                <CommandList>
+                  <CommandEmpty>No results found.</CommandEmpty>
+                  <CommandGroup heading="Suggestions">
+                    <CommandItem>
+                      <Calendar />
+                      <span>Calendar</span>
+                    </CommandItem>
+                    <CommandItem>
+                      <Smile />
+                      <span>Search Emoji</span>
+                    </CommandItem>
+                    <CommandItem>
+                      <Calculator />
+                      <span>Calculator</span>
+                    </CommandItem>
+                  </CommandGroup>
+                  <CommandSeparator />
+                  <CommandGroup heading="Settings">
+                    <CommandItem>
+                      <User />
+                      <span>Profile</span>
+                      <CommandShortcut>⌘P</CommandShortcut>
+                    </CommandItem>
+                    <CommandItem>
+                      <CreditCard />
+                      <span>Billing</span>
+                      <CommandShortcut>⌘B</CommandShortcut>
+                    </CommandItem>
+                    <CommandItem>
+                      <Settings />
+                      <span>Settings</span>
+                      <CommandShortcut>⌘S</CommandShortcut>
+                    </CommandItem>
+                  </CommandGroup>
+                </CommandList>
+              </CommandDialog>
+
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <button 
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  <button
+                    onClick={() =>
+                      setTheme(theme === "dark" ? "light" : "dark")
+                    }
                     className="flex items-center gap-2 cursor-pointer w-full"
                   >
-                    {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                    {theme === "dark" ? (
+                      <Sun className="h-4 w-4" />
+                    ) : (
+                      <Moon className="h-4 w-4" />
+                    )}
                     <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
                   </button>
                 </SidebarMenuButton>
@@ -325,7 +320,9 @@ export function AppSidebar() {
                   src={user?.avatar ? user.avatar : undefined}
                   alt="@shadcn"
                 />
-                <AvatarFallback className="bg-gray-200 text-black font-medium dark:bg-muted dark:text-white ">{getInitials(user?.name)}</AvatarFallback>
+                <AvatarFallback className="bg-gray-200 text-black font-medium dark:bg-muted dark:text-white ">
+                  {getInitials(user?.name)}
+                </AvatarFallback>
               </Avatar>
 
               {/* Show name and email only if sidebar is expanded */}
@@ -339,15 +336,15 @@ export function AppSidebar() {
                   </span>
                 </div>
               )}
-              <ChevronsUpDown className="ml-auto text-muted-foreground h-5 w-5"/>
+              <ChevronsUpDown className="ml-auto text-muted-foreground h-5 w-5" />
             </button>
-            
-
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent className={`w-56 ${
-                open ? "" : "m-4"
-              }`} align="end" sideOffset={8}>
+          <DropdownMenuContent
+            className={`w-56 ${open ? "" : "m-4"}`}
+            align="end"
+            sideOffset={8}
+          >
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">{user.name}</p>
@@ -357,22 +354,13 @@ export function AppSidebar() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <ArrowUpRight className="mr-2 h-4 w-4" />
-              Upgrade to Pro
-            </DropdownMenuItem>
-            <DropdownMenuItem>
+            
+            <DropdownMenuItem onClick={() => setProfileModalOpen(true)}>
               <User className="mr-2 h-4 w-4" />
               Account
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              Billing
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Bell className="mr-2 h-4 w-4" />
-              Notifications
-            </DropdownMenuItem>
+
+            
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-400" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4 text-red-400" />
@@ -380,6 +368,10 @@ export function AppSidebar() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <UpdateProfileModal
+          open={profileModalOpen}
+          setOpen={setProfileModalOpen}
+        />
       </SidebarFooter>
     </Sidebar>
   );

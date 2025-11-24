@@ -291,7 +291,7 @@ export function WaitlistExperience() {
                         Join the waitlist{" "}
                       </h1>
                       <p className="text-white/70 text-base leading-relaxed">
-                        Get early access to Meet AI 
+                        Get early access to Meet Wise 
                         <br />
                         
                       </p>

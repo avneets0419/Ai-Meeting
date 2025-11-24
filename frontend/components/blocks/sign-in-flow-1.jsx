@@ -641,7 +641,7 @@ export const SignInPage = ({ className }) => {
                       <nav className="mb-6  items-center flex  gap-2 text-sm font-medium text-black dark:text-white">
                         <AudioWaveformIcon className="h-5 w-5 text-black dark:text-white" />
                         <span className="tracking-wide uppercase font-bold">
-                          Meet AI
+                          Meet Wise
                         </span>
                       </nav>
                       <h1 className="font-readex text-[2.5rem] font-bold leading-[1.1] tracking-tight text-white">

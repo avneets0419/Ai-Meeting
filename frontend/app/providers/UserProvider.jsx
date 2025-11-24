@@ -1,8 +1,12 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const UserContext = createContext(null);
+
+export function useUser() {
+  return useContext(UserContext);
+}
 
 export default function UserProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -21,7 +25,7 @@ export default function UserProvider({ children }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, API_URL }}>
       {children}
     </UserContext.Provider>
   );
