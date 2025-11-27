@@ -21,13 +21,13 @@ function CallbackHandler() {
     router.replace("/dashboard");
   }, [token, router]);
 
-  return <div className="flex justify-center items-center h-100dvh"><OrbitalLoader/></div>;
+  return <div className="flex justify-center items-center h-screen"><OrbitalLoader/></div>;
 }
 
 // Export page with Suspense wrapper
 export default function Page() {
   return (
-    <Suspense fallback={<div className="flex justify-center items-center h-100dvh"><OrbitalLoader/></div>}>
+    <Suspense fallback={<div className="flex justify-center items-center h-screen"><OrbitalLoader/></div>}>
       <CallbackHandler />
     </Suspense>
   );

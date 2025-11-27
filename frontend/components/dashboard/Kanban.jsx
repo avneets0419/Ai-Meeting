@@ -11,6 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusIcon } from "lucide-react";
 import TaskModal from "./TaskModal";
+import { OrbitalLoader } from "../ui/orbital-loader";
 
 const columns = [
   { id: "To Do", name: "To Do", color: "#3B82F6", shadow: "rgba(59, 130, 246, 0.1)" },
@@ -169,7 +170,7 @@ const refreshTasks = async () => {
   };
 
   if (loading) {
-    return <div className="text-center py-10 text-gray-400">Loading tasks...</div>;
+    return <div className="flex h-screen justify-center items-center"><OrbitalLoader/></div>;
   }
   const openTaskModal = (status) => {
     setDefaultStatus(status);  // 👈 save clicked column
