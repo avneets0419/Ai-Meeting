@@ -10,11 +10,12 @@ import {
 } from "@/components/kibo-ui/kanban";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusIcon } from "lucide-react";
+import TaskModal from "./TaskModal";
 
 const columns = [
-  { id: "todo", name: "To Do", color: "#3B82F6", shadow: "rgba(59, 130, 246, 0.1)" },
-  { id: "in-progress", name: "In Progress", color: "#F59E0B", shadow: "rgba(255,193,7,0.1)" },
-  { id: "completed", name: "Completed", color: "#10B981", shadow: "rgba(16,185,129,0.1)" }
+  { id: "To Do", name: "To Do", color: "#3B82F6", shadow: "rgba(59, 130, 246, 0.1)" },
+  { id: "In Progress", name: "In Progress", color: "#F59E0B", shadow: "rgba(255,193,7,0.1)" },
+  { id: "Completed", name: "Completed", color: "#10B981", shadow: "rgba(16,185,129,0.1)" }
 ];
 
 
@@ -24,7 +25,10 @@ const shortDateFormatter = new Intl.DateTimeFormat("en-US", { month: "short", da
 export default function Kanban() {
   const [features, setFeatures] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [taskModalOpen, setTaskModalOpen] = useState(false);
+const [defaultStatus, setDefaultStatus] = useState("todo");
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 
   // ✅ Fetch tasks from backend
   useEffect(() => {
@@ -60,25 +64,34 @@ export default function Kanban() {
   // ✅ Detect drag/drop column change
  // inside your Kanban page/component
  const handleDataChange = async (newData, meta) => {
-
-
-
-
-
-
   setFeatures(newData);
-
-
-
-
   const { movedItem, fromColumnId, toColumnId } = meta;
 
-
-
   if (fromColumnId === toColumnId) {
-    console.log("ℹ️ Column unchanged, skipping backend update.");
     return;
   }
+
+  const refreshTasks = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/api/tasks`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    const formatted = data.tasks.map((t) => ({
+      id: t.id,
+      name: t.title,
+      column: t.status,
+      startAt: new Date(t.startAt),
+      endAt: new Date(t.endAt),
+    }));
+
+    setFeatures(formatted);
+  }
+};
+
 
 
   try {
@@ -92,9 +105,28 @@ export default function Kanban() {
       body: JSON.stringify({ status: toColumnId }),
     });
 
-    console.log("🧭 Backend response:", res.status);
   } catch (err) {
     console.error("Error calling backend:", err);
+  }
+};
+const refreshTasks = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/api/tasks`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    const formatted = data.tasks.map((t) => ({
+      id: t.id,
+      name: t.title,
+      column: t.status,
+      startAt: new Date(t.startAt),
+      endAt: new Date(t.endAt),
+    }));
+
+    setFeatures(formatted);
   }
 };
 
@@ -139,8 +171,12 @@ export default function Kanban() {
   if (loading) {
     return <div className="text-center py-10 text-gray-400">Loading tasks...</div>;
   }
-
-  return (
+  const openTaskModal = (status) => {
+    setDefaultStatus(status);  // 👈 save clicked column
+    setTaskModalOpen(true);
+    console.log(status)
+  };
+  return (<>
     <KanbanProvider columns={columns} data={features} onDataChange={handleDataChange}>
       {(column) => (
         <KanbanBoard id={column.id} key={column.id} shadowColor={column.shadow}>
@@ -153,7 +189,7 @@ export default function Kanban() {
               <PlusIcon
                 className="h-5 w-5 cursor-pointer"
                 style={{ color: column.color }}
-                onClick={() => handleAddTask(column.id)}
+                onClick={() => openTaskModal(column.id)}
               />
             </div>
           </KanbanHeader>
@@ -187,5 +223,12 @@ export default function Kanban() {
         </KanbanBoard>
       )}
     </KanbanProvider>
+    <TaskModal
+  open={taskModalOpen}
+  setOpen={setTaskModalOpen}
+  defaultStatus={defaultStatus}
+  onTaskCreated={refreshTasks}
+/>
+    </>
   );
 }

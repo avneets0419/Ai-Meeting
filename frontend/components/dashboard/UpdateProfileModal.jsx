@@ -61,7 +61,7 @@ export default function UpdateProfileModal({ open, setOpen }) {
               Update Profile
             </DialogTitle>
             <DialogDescription className="sm:text-left">
-              Click Save button to make changes.
+              Click update to save changes.
             </DialogDescription>
         </DialogHeader>
         <div className="flex pt-2 pb-2 gap-4 flex-col">
@@ -88,7 +88,7 @@ export default function UpdateProfileModal({ open, setOpen }) {
     </div>
 
           <Button className="w-full" onClick={updateProfile}>
-            Save Changes
+            Update
           </Button>
         </div>
 
