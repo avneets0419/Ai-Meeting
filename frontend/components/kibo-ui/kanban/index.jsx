@@ -125,19 +125,7 @@ export const KanbanCard = ({ id, name, children, className, onClick }) => {
         </Card>
       </div>
 
-      {/* optional active state visual
-      {activeCardId === id && (
-        <div className="mt-1">
-          <Card
-            className={cn(
-              "ring-2 ring-primary",
-              className
-            )}
-          >
-            {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
-          </Card>
-        </div>
-      )} */}
+      
     </>
   );
 };
