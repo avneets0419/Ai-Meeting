@@ -83,7 +83,9 @@ export default function TaskUpdateModal({
       console.log(date)
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error || "Failed to update task");
+        alert(data.error || "Failed to update task")
+        console.log(data)
+        console.log(res)
         return;
       }
 

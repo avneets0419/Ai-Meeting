@@ -57,7 +57,7 @@ router.post("/", authMiddleware, async (req, res) => {
  */
 router.put("/:id", authMiddleware, async (req, res) => {
     const { id } = req.params;
-    const { title, description, status } = req.body;
+    const { title, description, status, startAt, endAt } = req.body;
   
     try {
       const updatedTask = await prisma.task.update({
