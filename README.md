@@ -170,10 +170,6 @@ All audio files are uploaded in-memory (not saved locally).
 
 Backend is CORS-enabled for local dev.
 
-When deployed (e.g., Render + Vercel), ensure:
-
-Frontend calls backend using full URL (https://your-backend.onrender.com)
-
 ASSEMBLYAI_API_KEY is valid and stored in environment vars.
 
 💡 Future Enhancements
@@ -187,6 +183,10 @@ ASSEMBLYAI_API_KEY is valid and stored in environment vars.
 
 📈 Meeting analytics dashboard
 
-🧑‍💻 Contributors
+bash
+
+---
+
+### 🧑‍💻 Contributors
 Avneet Singh — Full-Stack Developer
 Built with ❤️ using Next.js, Express, and AssemblyAI
