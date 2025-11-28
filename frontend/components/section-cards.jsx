@@ -1,9 +1,7 @@
-import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
-
-import { Badge } from "@/components/ui/badge"
+"use-client"
+import { useEffect, useState } from "react";
 import {
   Card,
-
   CardDescription,
   CardFooter,
   CardHeader,
@@ -11,28 +9,44 @@ import {
 } from "@/components/ui/card"
 
 export function SectionCards() {
+  
+
+
+  const [taskCounts, setTaskCounts] = useState({
+    todo: 0,
+    inProgress: 0,
+    completed: 0
+  });
+  
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await fetch(`${API_URL}/api/tasks`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setTaskCounts(data.counts);
+        }
+
+      } catch (err) {
+        console.error("Error loading counts:", err);
+      }
+    };
+
+    fetchCounts();
+  }, []);
   return (
     <div
       className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-3 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-0 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
-      {/* <Card className="@container/card">
-        <CardHeader>
-          <CardDescription>Meetings This Month</CardDescription>
-          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            120
-          </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp className="h-4 w-4"/>
-              +2.5%
-            </Badge>
-          </CardAction>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <IconTrendingUp className="h-4 w-4" />
-          </div>
-        </CardFooter>
-      </Card> */}
+    
       <Card shadowColor="rgba(0, 128, 255, 0.15) dark:rgba(0, 128, 255, 1)" hover={true} className="@container/card">
         <CardHeader>
         <CardDescription>
@@ -43,21 +57,11 @@ export function SectionCards() {
 </CardDescription>
 
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            9
+          {taskCounts.todo}
           </CardTitle>
-          {/* <CardAction>
-            <Badge variant="outline">
-              <IconTrendingDown className="h-4 w-4"/>
-              -20%
-            </Badge>
-          </CardAction> */}
-        </CardHeader>
-        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Down 20% this period <IconTrendingDown className="size-4" />
-          </div>
 
-        </CardFooter> */}
+        </CardHeader>
+
       </Card>
       <Card shadowColor="rgba(245, 158, 11, 0.15) dark:rgba(245, 158, 11, 0.55)"
   hover={true} className="@container/card">
@@ -69,21 +73,11 @@ export function SectionCards() {
   </div>
 </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            4
+          {taskCounts.inProgress}
           </CardTitle>
-          {/* <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp className="h-4 w-4"/>
-              +12.5%
-            </Badge>
-          </CardAction> */}
+
         </CardHeader>
-        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Strong user retention <IconTrendingUp className="h-4 w-4" />
-          </div>
-          
-        </CardFooter> */}
+
       </Card>
       <Card shadowColor="rgba(16, 185, 129, 0.15) dark:rgba(16, 185, 129, 0.87)"
   hover={true} className="@container/card">
@@ -95,21 +89,11 @@ export function SectionCards() {
   </div>
 </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            200
+          {taskCounts.completed}
           </CardTitle>
-          {/* <CardAction>
-            <Badge variant="outline">
-              <IconTrendingUp className="h-4 w-4"/>
-              +4.5%
-            </Badge>
-          </CardAction> */}
+
         </CardHeader>
-        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Steady performance increase <IconTrendingUp className="size-4" />
-          </div>
-          
-        </CardFooter> */}
+
       </Card>
     </div>
   );

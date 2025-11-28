@@ -17,9 +17,9 @@ router.get("/", authMiddleware, async (req, res) => {
 
     // Count summary for dashboard cards
     const counts = {
-      todo: tasks.filter((t) => t.status === "todo").length,
-      inProgress: tasks.filter((t) => t.status === "in-progress").length,
-      completed: tasks.filter((t) => t.status === "completed").length,
+      todo: tasks.filter((t) => t.status === "To Do").length,
+      inProgress: tasks.filter((t) => t.status === "In Progress").length,
+      completed: tasks.filter((t) => t.status === "Completed").length,
     };
 
     res.json({ tasks, counts });
