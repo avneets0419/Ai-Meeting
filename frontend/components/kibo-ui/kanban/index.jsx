@@ -18,6 +18,7 @@ import tunnel from "tunnel-rat";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { GripVertical } from "lucide-react";
 
 const t = tunnel();
 
@@ -71,14 +72,7 @@ export const KanbanBoard = ({
 
 
 
-export const KanbanCard = (
-  {
-    id,
-    name,
-    children,
-    className
-  }
-) => {
+export const KanbanCard = ({ id, name, children, className, onClick }) => {
   const {
     attributes,
     listeners,
@@ -86,9 +80,8 @@ export const KanbanCard = (
     transition,
     transform,
     isDragging,
-  } = useSortable({
-    id,
-  });
+  } = useSortable({ id });
+
   const { activeCardId } = useContext(KanbanContext);
 
   const style = {
@@ -98,28 +91,53 @@ export const KanbanCard = (
 
   return (
     <>
-      <div style={style} {...listeners} {...attributes} ref={setNodeRef} >
+      <div style={style} ref={setNodeRef} className="relative">
         <Card
+          onClick={(e) => {
+            // prevent click while dragging
+            // isDragging is managed by dnd-kit; guard click with it
+            if (isDragging) return;
+            if (onClick) onClick(e);
+          }}
           className={cn(
-            "cursor-grab gap-4 rounded-md p-3 shadow-sm h-20",
-            isDragging && "pointer-events-none cursor-grabbing opacity-30",
+            "flex items-center gap-3 rounded-md p-3 shadow-sm h-20",
+            isDragging && "pointer-events-none opacity-30",
             className
-          )}>
-          {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
+          )}
+        >
+          {/* DRAG HANDLE: attach listeners/attributes here so the rest of the card receives clicks */}
+          <div
+            className="flex-shrink-0 cursor-grab p-1"
+            {...listeners}
+            {...attributes}
+            onPointerDown={(e) => {
+              // keep default so dnd-kit can start drag
+            }}
+            aria-hidden
+          >
+            <GripVertical className="w-4 h-4 text-muted-foreground" />
+          </div>
+
+          {/* MAIN CLICKABLE AREA */}
+          <div className="flex-1">
+            {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
+          </div>
         </Card>
       </div>
+
+      {/* optional active state visual
       {activeCardId === id && (
-        <t.In>
+        <div className="mt-1">
           <Card
             className={cn(
-              "cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary",
-              isDragging && "cursor-grabbing",
+              "ring-2 ring-primary",
               className
-            )}>
+            )}
+          >
             {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
           </Card>
-        </t.In>
-      )}
+        </div>
+      )} */}
     </>
   );
 };

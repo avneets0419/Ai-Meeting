@@ -52,12 +52,12 @@ export function SectionCards() {
             </Badge>
           </CardAction> */}
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
             Down 20% this period <IconTrendingDown className="size-4" />
           </div>
 
-        </CardFooter>
+        </CardFooter> */}
       </Card>
       <Card shadowColor="rgba(245, 158, 11, 0.15) dark:rgba(245, 158, 11, 0.55)"
   hover={true} className="@container/card">
@@ -78,12 +78,12 @@ export function SectionCards() {
             </Badge>
           </CardAction> */}
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
             Strong user retention <IconTrendingUp className="h-4 w-4" />
           </div>
-          {/* <div className="text-muted-foreground">Engagement exceed targets</div> */}
-        </CardFooter>
+          
+        </CardFooter> */}
       </Card>
       <Card shadowColor="rgba(16, 185, 129, 0.15) dark:rgba(16, 185, 129, 0.87)"
   hover={true} className="@container/card">
@@ -104,12 +104,12 @@ export function SectionCards() {
             </Badge>
           </CardAction> */}
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
+        {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
             Steady performance increase <IconTrendingUp className="size-4" />
           </div>
-          {/* <div className="text-muted-foreground">Meets growth projections</div> */}
-        </CardFooter>
+          
+        </CardFooter> */}
       </Card>
     </div>
   );

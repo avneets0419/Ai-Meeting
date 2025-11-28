@@ -105,10 +105,7 @@ export default function TaskModal({ open, setOpen,defaultStatus,onTaskCreated })
       setOpen(false);
       if (onTaskCreated) onTaskCreated();
   
-    //   // OPTIONAL: If parent passed refresh function
-    //   if (typeof onTaskCreated === "function") {
-    //     onTaskCreated();
-    //   }
+
   
     } catch (err) {
       console.error(err);

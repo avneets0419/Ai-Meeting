@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusIcon } from "lucide-react";
 import TaskModal from "./TaskModal";
 import { OrbitalLoader } from "../ui/orbital-loader";
+import TaskUpdateModal from "./TaskUpdateModal";
 
 const columns = [
   { id: "To Do", name: "To Do", color: "#3B82F6", shadow: "rgba(59, 130, 246, 0.1)" },
@@ -28,6 +29,9 @@ export default function Kanban() {
   const [loading, setLoading] = useState(true);
   const [taskModalOpen, setTaskModalOpen] = useState(false);
 const [defaultStatus, setDefaultStatus] = useState("todo");
+const [updateModalOpen, setUpdateModalOpen] = useState(false);
+const [selectedTask, setSelectedTask] = useState(null);
+
   const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
@@ -202,6 +206,11 @@ const refreshTasks = async () => {
                 id={feature.id}
                 key={feature.id}
                 name={feature.name}
+                onClick={() => {
+                  setSelectedTask(feature);
+                  setUpdateModalOpen(true);
+                  console.log(updateModalOpen)
+                }}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex flex-col gap-1">
@@ -229,6 +238,11 @@ const refreshTasks = async () => {
   setOpen={setTaskModalOpen}
   defaultStatus={defaultStatus}
   onTaskCreated={refreshTasks}
+/><TaskUpdateModal
+  open={updateModalOpen}
+  setOpen={setUpdateModalOpen}
+  task={selectedTask}
+  onTaskUpdated={refreshTasks}
 />
     </>
   );

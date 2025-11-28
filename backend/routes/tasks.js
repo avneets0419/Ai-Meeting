@@ -62,7 +62,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
     try {
       const updatedTask = await prisma.task.update({
         where: { id },
-        data: { title, description, status },
+        data: { title, description, status, startAt, endAt },
       });
       res.json(updatedTask);
     } catch (err) {
