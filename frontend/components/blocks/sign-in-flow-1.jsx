@@ -422,7 +422,7 @@ export const SignInPage = ({ className }) => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      // Redirect immediately
+
       router.push("/dashboard");
 
       // Keep showing loading for 2 seconds
@@ -482,12 +482,14 @@ export const SignInPage = ({ className }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, name, password }),
+        credentials: "include"
       });
 
       const data = await res.json();
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
+        
 
         // show success animation
         setReverseCanvasVisible(true);
@@ -522,6 +524,7 @@ export const SignInPage = ({ className }) => {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
+        
 
         // show success animation
         setReverseCanvasVisible(true);

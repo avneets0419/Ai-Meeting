@@ -43,9 +43,13 @@ function Dashboard() {
           setUser(data);
         } else {
           console.error(data.error);
+          localStorage.removeItem("token");
+          router.push("/signup")
         }
       } catch (err) {
         console.error("Error fetching user:", err);
+        localStorage.removeItem("token");
+        router.push("/signup")
       } finally {
         setTimeout(() => setLoading(false), 1500); // simulate loading
       }

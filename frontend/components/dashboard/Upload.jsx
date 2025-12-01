@@ -10,7 +10,7 @@ import { formatBytes, useFileUpload } from "@/hooks/use-file-upload";
 import { Button } from "@/components/ui/button";
 
 export default function UploadFile() {
-  const maxSize = 25 * 1024 * 1024; // 25MB limit
+  const maxSize = 70 * 1024 * 1024; // MB limit
   const [uploading, setUploading] = useState(false);
   const [transcriptionId, setTranscriptionId] = useState(null);
   const [message, setMessage] = useState("");
@@ -35,35 +35,38 @@ export default function UploadFile() {
       setMessage("Please select a file first");
       return;
     }
-
-    const formData = new FormData();
-    formData.append("audio", file); // 👈 this must match upload.single("audio") in backend
-
+  
+    setUploading(true);
+  
     try {
-      setUploading(true);
-      setMessage("Uploading and starting transcription...");
-
-      const res = await fetch("http://localhost:8080/api/transcribe", {
+      const formData = new FormData();
+      formData.append("audio", file);
+  
+      const res = await fetch(`http://localhost:8080/api/transcribe/transcribe`, {
         method: "POST",
         body: formData,
       });
-
+  
       const data = await res.json();
-      if (res.ok) {
-        setTranscriptionId(data.id);
-        setMessage("✅ Transcription started successfully!");
-        console.log("🎧 AssemblyAI response:", data);
+  
+      if (data.success) {
+        console.log("Full Text:", data.text);
+        console.log("Summary:", data.summary);
+        console.log("Summary:", data.raw);
+  
+        // You can redirect to a dynamic meeting page here
+        // router.push(`/meetings/${data.transcriptId}`);
       } else {
-        setMessage(`❌ Error: ${data.error || "Failed to start transcription"}`);
-        console.error("Upload error:", data);
+        setMessage("Error: " + data.error);
       }
+  
     } catch (err) {
-      console.error("Error uploading:", err);
-      setMessage("❌ Upload failed. Check console for details.");
-    } finally {
-      setUploading(false);
+      setMessage("Upload failed");
     }
+  
+    setUploading(false);
   };
+  
 
   return (
     <div className="flex flex-col gap-2">
