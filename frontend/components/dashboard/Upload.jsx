@@ -41,7 +41,7 @@ export default function UploadFile() {
     { text: "File uploaded successfully" },
     { text: "Transcription queued" },
     { text: "Processing transcription..." },
-    { text: "Generating AI summary with Gemini..." },
+    { text: "Generating AI summary ..." },
     { text: "Creating meeting title and labels..." },
     { text: "Saving to database..." },
     { text: "Complete! Redirecting..." },
