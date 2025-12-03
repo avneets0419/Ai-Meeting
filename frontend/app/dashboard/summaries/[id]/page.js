@@ -56,10 +56,10 @@ export default function MeetingDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-sidebar">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading meeting details...</p>
+          <p className="mt-4 text-gray-500">Loading meeting details...</p>
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ export default function MeetingDetailsPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <p className="text-red-600 text-lg">{error || "Meeting not found"}</p>
-          <Button onClick={() => router.push("/meetings")} className="mt-4">
+          <Button onClick={() => router.push("/dashboard/summaries")} className="mt-4">
             Back to Meetings
           </Button>
         </div>
@@ -85,7 +85,7 @@ export default function MeetingDetailsPage() {
         <div className="mb-6">
           <Button
             variant="ghost"
-            onClick={() => router.push("/meetings")}
+            onClick={() => router.push("/dashboard/summaries")}
             className="mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
