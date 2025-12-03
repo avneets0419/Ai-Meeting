@@ -153,6 +153,7 @@ UploadPanel() {
   const [timeRange, setTimeRange] = React.useState("90d");
   const [uploadedFile, setUploadedFile] = React.useState(null);
   const [loading, setLoading] = useState(false);
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const handleFileChange = (file) => {
     setUploadedFile(file);
