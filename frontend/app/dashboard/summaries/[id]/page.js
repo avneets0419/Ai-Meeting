@@ -26,7 +26,7 @@ export default function MeetingDetailsPage() {
         }
 
         const res = await fetch(
-          `http://localhost:8080/api/transcribe/meeting/${params.id}`,
+          `${API_URL}/api/transcribe/meeting/${params.id}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`,

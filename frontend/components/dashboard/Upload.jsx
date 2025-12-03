@@ -17,6 +17,7 @@ export default function UploadFile() {
   const [transcriptionId, setTranscriptionId] = useState(null);
   const [message, setMessage] = useState("");
   const [progress, setProgress] = useState("");
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const [
     { files, isDragging, errors },
@@ -56,7 +57,7 @@ export default function UploadFile() {
       const formData = new FormData();
       formData.append("audio", file);
   
-      const res = await fetch(`http://localhost:8080/api/transcribe/transcribe`, {
+      const res = await fetch(`${API_URL}/api/transcribe/transcribe`, {
         method: "POST",
         body: formData,
         headers: {
@@ -76,7 +77,7 @@ export default function UploadFile() {
         const pollInterval = setInterval(async () => {
           try {
             const statusRes = await fetch(
-              `http://localhost:8080/api/transcribe/status/${data.transcriptionId}`,
+              `${API_URL}/api/transcribe/status/${data.transcriptionId}`,
               {
                 headers: {
                   'Authorization': `Bearer ${token}`,

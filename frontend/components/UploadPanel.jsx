@@ -163,7 +163,7 @@ UploadPanel() {
     formData.append("audio", file); // 👈 MUST match upload.single("audio")
   
     try {
-      const res = await fetch("http://localhost:8080/api/transcribe", {
+      const res = await fetch(`${API_URL}/api/transcribe`, {
         method: "POST",
         body: formData, // 👈 no need to set headers manually
       });
