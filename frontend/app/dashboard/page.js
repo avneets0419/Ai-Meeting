@@ -84,7 +84,7 @@ function Dashboard() {
       <SectionCards />
       <div className='py-4'>
       <UploadPanel />
-      <RecentMeetings/>
+
       </div>
       </div>
       <div className="flex-1 overflow-y-auto p-4">

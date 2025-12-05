@@ -38,6 +38,7 @@ import {
   Calendar1,
   Sun,
   Moon,
+  Upload,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -186,10 +187,9 @@ export function AppSidebar() {
               </SidebarMenuItem> */}
 
               <SidebarMenuItem>
-                <SidebarMenuButton 
+                <SidebarMenuButton
                   asChild
                   isActive={pathname === "/dashboard/summaries"}
-                  
                 >
                   <Link href="/dashboard/summaries">
                     <FileText />
@@ -251,17 +251,37 @@ export function AppSidebar() {
                 <CommandList>
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup heading="Suggestions">
-                    <CommandItem>
+                    <CommandItem
+                      onSelect={() => {
+                        setSearchOpen(false);
+                        router.push("/dashboard/calendar");//nextTask
+                      }}
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      <span>Upload Meeting</span>
+                    </CommandItem>
+                    <CommandItem onSelect={() => {
+                        setSearchOpen(false);
+                        router.push("/dashboard/calendar");
+                      }}>
                       <Calendar />
                       <span>Calendar</span>
                     </CommandItem>
-                    <CommandItem>
-                      <Smile />
-                      <span>Search Emoji</span>
+                    <CommandItem onSelect={() => {
+                        setSearchOpen(false);
+                        router.push("/dashboard/summaries");;
+                      }}>
+                      <FileText />
+                      <span>Summaries</span>
                     </CommandItem>
-                    <CommandItem>
-                      <Calculator />
-                      <span>Calculator</span>
+                    <CommandItem onSelect={() => {
+                        setSearchOpen(false);
+                        setTimeout(() => {
+                          router.push("/dashboard/tasks");
+                        }, 10);
+                      }}>
+                      <ClipboardCheck />
+                      <span>Action Items</span>
                     </CommandItem>
                   </CommandGroup>
                   <CommandSeparator />
@@ -354,13 +374,12 @@ export function AppSidebar() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            
+
             <DropdownMenuItem onClick={() => setProfileModalOpen(true)}>
               <User className="mr-2 h-4 w-4" />
               Account
             </DropdownMenuItem>
 
-            
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-400" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4 text-red-400" />
