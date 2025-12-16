@@ -241,6 +241,156 @@ router.get("/status/:id", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/meetings", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId; // From auth middleware
+    
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    
+    // Search/filter parameters
+    const search = req.query.search || '';
+    const label = req.query.label || '';
+    
+    // Build where clause
+    const where = { userId };
+    
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { shortSummary: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+    
+    if (label) {
+      where.label = label;
+    }
+
+    // Get total count for pagination
+    const totalCount = await prisma.meeting.count({ where });
+    
+    // Get meetings with pagination
+    const meetings = await prisma.meeting.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
+      select: {
+        id: true,
+        transcriptionId: true,
+        title: true,
+        label: true,
+        time: true,
+        shortSummary: true,
+        createdAt: true,
+        updatedAt: true,
+      }
+    });
+
+    // Calculate pagination info
+    const totalPages = Math.ceil(totalCount / limit);
+    const hasNextPage = page < totalPages;
+    const hasPrevPage = page > 1;
+
+    return res.json({
+      success: true,
+      meetings,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalCount,
+        limit,
+        hasNextPage,
+        hasPrevPage,
+      }
+    });
+    
+  } catch (err) {
+    console.error("❌ Get meetings error:", err.message);
+    return res.status(500).json({
+      success: false,
+      error: err.message || "Failed to retrieve meetings",
+    });
+  }
+});
+
+// Get available labels (for filter dropdown)
+router.get("/labels", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId;
+    
+    // Get unique labels for this user
+    const meetings = await prisma.meeting.findMany({
+      where: { userId },
+      select: { label: true },
+      distinct: ['label'],
+    });
+    
+    const labels = meetings
+      .map(m => m.label)
+      .filter(Boolean)
+      .sort();
+
+    return res.json({
+      success: true,
+      labels,
+    });
+    
+  } catch (err) {
+    console.error("❌ Get labels error:", err.message);
+    return res.status(500).json({
+      success: false,
+      error: err.message || "Failed to retrieve labels",
+    });
+  }
+});
+
+// Delete meeting
+router.delete("/meeting/:id", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.userId;
+    
+    // Check if meeting exists and belongs to user
+    const meeting = await prisma.meeting.findUnique({
+      where: { id },
+    });
+    
+    if (!meeting) {
+      return res.status(404).json({
+        success: false,
+        error: "Meeting not found",
+      });
+    }
+    
+    if (meeting.userId !== userId) {
+      return res.status(403).json({
+        success: false,
+        error: "You don't have permission to delete this meeting",
+      });
+    }
+    
+    // Delete the meeting
+    await prisma.meeting.delete({
+      where: { id },
+    });
+
+    return res.json({
+      success: true,
+      message: "Meeting deleted successfully",
+    });
+    
+  } catch (err) {
+    console.error("❌ Delete meeting error:", err.message);
+    return res.status(500).json({
+      success: false,
+      error: err.message || "Failed to delete meeting",
+    });
+  }
+});
+
 // Get meeting details from database
 router.get("/meeting/:id", authMiddleware, async (req, res) => {
   try {
